@@ -91,20 +91,29 @@ const emptyProduct = (): Omit<Product, "id" | "created_at"> => ({
 
 function ProductFormModal({
   initial,
+  seriesProducts,
   onSave,
   onClose,
   showToast,
 }: {
-  initial: Omit<Product, "id" | "created_at"> | null;
-  onSave: () => void;
+  initial: (Omit<Product, "id" | "created_at"> & { _id?: string }) | null;
+  seriesProducts?: Product[];
+  onSave: () => void | Promise<void>;
   onClose: () => void;
   showToast: (msg: string, ok?: boolean) => void;
 }) {
-  const [form, setForm] = useState(initial ?? emptyProduct());
+  const isEditSeries = !!initial && !!seriesProducts && seriesProducts.length > 0;
+  const initialForm = initial
+    ? {
+        ...initial,
+        model: isEditSeries
+          ? seriesProducts!.map(p => p.model).filter(Boolean).join("\n")
+          : (initial.model ?? ""),
+      }
+    : emptyProduct();
+  const [form, setForm] = useState(initialForm);
   const [saving, setSaving] = useState(false);
   const [imgUploading, setImgUploading] = useState(false);
-  const [specKey, setSpecKey] = useState("");
-  const [specVal, setSpecVal] = useState("");
   const imgInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!initial;
 
@@ -122,15 +131,6 @@ function ProductFormModal({
     set("image_path", path);
     setImgUploading(false);
   };
-
-  const addSpec = () => {
-    if (!specKey.trim()) return;
-    set("specs", [...form.specs, { key: specKey.trim(), value: specVal.trim() }]);
-    setSpecKey(""); setSpecVal("");
-  };
-
-  const removeSpec = (i: number) =>
-    set("specs", form.specs.filter((_, idx) => idx !== i));
 
   const save = async () => {
     if (!form.name || !form.category) { showToast("Name and category required", false); return; }
@@ -151,10 +151,40 @@ function ProductFormModal({
     };
 
     if (isEdit) {
-      const { error } = await supabase.from("products").update({ ...basePayload, model: form.model || null }).eq("id", (initial as any)._id);
-      setSaving(false);
-      if (error) { showToast(error.message, false); return; }
-      showToast("Product updated!");
+      if (isEditSeries && seriesProducts!.length > 0) {
+        const newModels = (form.model || "")
+          .split("\n")
+          .map(m => m.trim())
+          .filter(m => m.length > 0);
+        const existing = seriesProducts!;
+        const baseSort = existing[0]?.sort_order ?? 0;
+        for (let i = 0; i < Math.max(existing.length, newModels.length); i++) {
+          if (i < newModels.length && i < existing.length) {
+            const { error } = await supabase
+              .from("products")
+              .update({ ...basePayload, model: newModels[i], sort_order: baseSort + i })
+              .eq("id", existing[i].id);
+            if (error) { setSaving(false); showToast(error.message, false); return; }
+          } else if (i < newModels.length) {
+            const { error } = await supabase
+              .from("products")
+              .insert({ ...basePayload, model: newModels[i], sort_order: baseSort + i });
+            if (error) { setSaving(false); showToast(error.message, false); return; }
+          } else {
+            const path = existing[i].image_path;
+            const stillUsed = existing.some((p, j) => j < newModels.length && p.image_path === path);
+            if (path && !stillUsed) await supabase.storage.from("media").remove([path]);
+            await supabase.from("products").delete().eq("id", existing[i].id);
+          }
+        }
+        setSaving(false);
+        showToast("Series updated!");
+      } else {
+        const { error } = await supabase.from("products").update({ ...basePayload, model: form.model || null }).eq("id", (initial as any)._id);
+        setSaving(false);
+        if (error) { showToast(error.message, false); return; }
+        showToast("Product updated!");
+      }
     } else {
       // Parse multiple models (one per line)
       const models = (form.model || "")
@@ -176,7 +206,7 @@ function ProductFormModal({
         showToast(`${models.length} products created!`);
       }
     }
-    onSave();
+    await onSave();
     onClose();
   };
 
@@ -235,9 +265,9 @@ function ProductFormModal({
             </div>
             <div>
               <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">
-                {isEdit ? "Model Number" : "Model Numbers (one per line)"}
+                {isEdit && !isEditSeries ? "Model Number" : "Model Numbers (one per line)"}
               </label>
-              {isEdit ? (
+              {isEdit && !isEditSeries ? (
                 <input
                   value={form.model || ""}
                   onChange={e => set("model", e.target.value)}
@@ -253,7 +283,9 @@ function ProductFormModal({
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-toyo-red resize-none"
                 />
               )}
-              {!isEdit && <p className="text-[10px] text-gray-400 mt-1">Enter multiple models to create one product per model</p>}
+              {(!isEdit || isEditSeries) && (
+                <p className="text-[10px] text-gray-400 mt-1">One product per line; edit the list to add or remove models.</p>
+              )}
             </div>
           </div>
 
@@ -279,42 +311,6 @@ function ProductFormModal({
               placeholder="Brief product description..."
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-toyo-red resize-none"
             />
-          </div>
-
-          {/* Specs */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">Specifications</label>
-            {form.specs.length > 0 && (
-              <div className="mb-3 space-y-1.5">
-                {form.specs.map((s, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
-                    <span className="text-xs font-semibold text-gray-600 w-32 shrink-0">{s.key}</span>
-                    <span className="text-xs text-gray-500 flex-1">{s.value}</span>
-                    <button onClick={() => removeSpec(i)} className="text-gray-300 hover:text-red-500">
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="flex gap-2">
-              <input
-                value={specKey} onChange={e => setSpecKey(e.target.value)}
-                placeholder="Spec name (e.g. Stroke)"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-toyo-red"
-                onKeyDown={e => e.key === "Enter" && addSpec()}
-              />
-              <input
-                value={specVal} onChange={e => setSpecVal(e.target.value)}
-                placeholder="Value (e.g. 100mm)"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-toyo-red"
-                onKeyDown={e => e.key === "Enter" && addSpec()}
-              />
-              <button
-                onClick={addSpec}
-                className="px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs font-semibold text-gray-600 transition-colors"
-              >Add</button>
-            </div>
           </div>
 
           {/* Download Links */}
@@ -384,12 +380,21 @@ function ProductFormModal({
 
 // ─── Products Tab ─────────────────────────────────────────────────────────────
 
+interface ProductSeries {
+  name: string;
+  products: Product[];
+}
+
 function ProductsTab({ showToast }: { showToast: (msg: string, ok?: boolean) => void }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [catFilter, setCatFilter] = useState("All");
-  const [modal, setModal] = useState<{ open: boolean; product: (Product & { _id: string }) | null }>({ open: false, product: null });
+  const [modal, setModal] = useState<{
+    open: boolean;
+    product: (Product & { _id: string }) | null;
+    seriesProducts: Product[] | null;
+  }>({ open: false, product: null, seriesProducts: null });
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -404,32 +409,58 @@ function ProductsTab({ showToast }: { showToast: (msg: string, ok?: boolean) => 
 
   useEffect(() => { fetchProducts(); }, []);
 
-  const deleteProduct = async (p: Product) => {
-    if (!confirm(`Delete "${p.name}"?`)) return;
-    if (p.image_path) await supabase.storage.from("media").remove([p.image_path]);
-    await supabase.from("products").delete().eq("id", p.id);
-    setProducts(prev => prev.filter(x => x.id !== p.id));
-    showToast("Product deleted");
+  const seriesMap = new Map<string, Product[]>();
+  products.forEach(p => {
+    if (!seriesMap.has(p.name)) seriesMap.set(p.name, []);
+    seriesMap.get(p.name)!.push(p);
+  });
+  const seriesList: ProductSeries[] = Array.from(seriesMap.entries()).map(([name, prods]) => ({
+    name,
+    products: prods.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
+  }));
+
+  const filteredSeries = seriesList.filter(s => {
+    const matchCat = catFilter === "All" || (s.products[0] && s.products[0].category === catFilter);
+    const matchSearch =
+      !search.trim() ||
+      s.name.toLowerCase().includes(search.toLowerCase()) ||
+      s.products.some(p => (p.model || "").toLowerCase().includes(search.toLowerCase()));
+    return matchCat && matchSearch;
+  });
+
+  const deleteSeries = async (s: ProductSeries) => {
+    if (!confirm(`Delete series "${s.name}" and all ${s.products.length} model(s)?`)) return;
+    const imagePath = s.products[0]?.image_path;
+    if (imagePath) await supabase.storage.from("media").remove([imagePath]);
+    for (const p of s.products) await supabase.from("products").delete().eq("id", p.id);
+    setProducts(prev => prev.filter(x => !s.products.some(sp => sp.id === x.id)));
+    showToast("Series deleted");
   };
 
-  const togglePublish = async (p: Product) => {
-    await supabase.from("products").update({ published: !p.published }).eq("id", p.id);
-    setProducts(prev => prev.map(x => x.id === p.id ? { ...x, published: !p.published } : x));
-    showToast(p.published ? "Set to draft" : "Published!");
+  const togglePublishSeries = async (s: ProductSeries) => {
+    const target = s.products.every(p => p.published) ? false : true;
+    for (const p of s.products) {
+      await supabase.from("products").update({ published: target }).eq("id", p.id);
+    }
+    setProducts(prev =>
+      prev.map(x => (s.products.some(sp => sp.id === x.id) ? { ...x, published: target } : x))
+    );
+    showToast(target ? "Series published!" : "Series set to draft");
+  };
+
+  const openEdit = (s: ProductSeries) => {
+    const first = s.products[0];
+    setModal({
+      open: true,
+      product: { ...first, _id: first.id } as Product & { _id: string },
+      seriesProducts: s.products,
+    });
   };
 
   const cats = ["All", ...Array.from(new Set(products.map(p => p.category)))];
 
-  const filtered = products.filter(p => {
-    const matchCat = catFilter === "All" || p.category === catFilter;
-    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-      (p.model || "").toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
-  });
-
   return (
     <div>
-      {/* Header row */}
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <h2 className="font-bold text-gray-800 text-sm mr-auto">Products ({products.length})</h2>
         <div className="relative">
@@ -447,7 +478,7 @@ function ProductsTab({ showToast }: { showToast: (msg: string, ok?: boolean) => 
           {cats.map(c => <option key={c}>{c}</option>)}
         </select>
         <button
-          onClick={() => setModal({ open: true, product: null })}
+          onClick={() => setModal({ open: true, product: null, seriesProducts: null })}
           className="flex items-center gap-1.5 bg-toyo-red text-white text-xs font-semibold px-3 py-2 rounded-lg hover:bg-toyo-red-dark transition-colors"
         >
           <Plus className="w-3.5 h-3.5" /> Add Product
@@ -456,68 +487,75 @@ function ProductsTab({ showToast }: { showToast: (msg: string, ok?: boolean) => 
 
       {loading ? (
         <div className="py-20 text-center text-gray-400 text-sm">Loading...</div>
-      ) : filtered.length === 0 ? (
+      ) : filteredSeries.length === 0 ? (
         <div className="py-20 text-center">
           <Package className="w-10 h-10 mx-auto text-gray-200 mb-3" />
           <p className="text-gray-400 text-sm">No products yet. Click "Add Product" to get started.</p>
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(p => (
-            <div key={p.id} className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-4 hover:border-gray-200 transition-all">
-              {/* Image */}
-              <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 flex items-center justify-center">
-                {p.image_url
-                  ? <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" />
-                  : <Package className="w-7 h-7 text-gray-200" />
-                }
-              </div>
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <h3 className="font-bold text-gray-900 text-sm truncate">{p.name}</h3>
-                  {p.model && <span className="text-xs font-mono text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">{p.model}</span>}
-                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ml-auto flex-shrink-0 ${p.published ? "bg-green-50 text-green-700" : "bg-yellow-50 text-yellow-700"}`}>
-                    {p.published ? "Published" : "Draft"}
-                  </span>
+          {filteredSeries.map(s => {
+            const first = s.products[0];
+            const allPublished = s.products.every(p => p.published);
+            return (
+              <div key={s.name} className="bg-white border border-gray-100 rounded-xl p-4 flex items-center gap-4 hover:border-gray-200 transition-all">
+                <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0 flex items-center justify-center">
+                  {first?.image_url ? (
+                    <img src={first.image_url} alt={s.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <Package className="w-7 h-7 text-gray-200" />
+                  )}
                 </div>
-                <span className="text-xs text-toyo-red font-semibold">{p.category}</span>
-                {p.description && <p className="text-xs text-gray-400 mt-0.5 truncate">{p.description}</p>}
-                {p.specs.length > 0 && (
-                  <p className="text-xs text-gray-400 mt-0.5">{p.specs.length} spec{p.specs.length > 1 ? "s" : ""}</p>
-                )}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <h3 className="font-bold text-gray-900 text-sm truncate">{s.name}</h3>
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ml-auto flex-shrink-0 ${allPublished ? "bg-green-50 text-green-700" : "bg-yellow-50 text-yellow-700"}`}>
+                      {allPublished ? "Published" : "Draft"}
+                    </span>
+                  </div>
+                  <span className="text-xs text-toyo-red font-semibold">{first?.category}</span>
+                  {first?.description && <p className="text-xs text-gray-400 mt-0.5 truncate">{first.description}</p>}
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    {s.products.map(p => (
+                      <span key={p.id} className="text-xs font-mono text-gray-500 bg-gray-100 px-1.5 py-0.5 rounded">
+                        {p.model || "—"}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => togglePublishSeries(s)}
+                    className="text-xs border border-gray-200 px-3 py-1.5 rounded-lg text-gray-600 hover:border-gray-300 transition-colors"
+                  >
+                    {allPublished ? "Unpublish" : "Publish"}
+                  </button>
+                  <button
+                    onClick={() => openEdit(s)}
+                    className="w-8 h-8 bg-gray-50 hover:bg-gray-100 rounded-lg flex items-center justify-center transition-colors"
+                  >
+                    <Pencil className="w-3.5 h-3.5 text-gray-600" />
+                  </button>
+                  <button
+                    onClick={() => deleteSeries(s)}
+                    className="w-8 h-8 bg-red-50 hover:bg-red-100 rounded-lg flex items-center justify-center transition-colors"
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                  </button>
+                </div>
               </div>
-              {/* Actions */}
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <button
-                  onClick={() => togglePublish(p)}
-                  className="text-xs border border-gray-200 px-3 py-1.5 rounded-lg text-gray-600 hover:border-gray-300 transition-colors"
-                >
-                  {p.published ? "Unpublish" : "Publish"}
-                </button>
-                <button
-                  onClick={() => setModal({ open: true, product: { ...p, _id: p.id } as any })}
-                  className="w-8 h-8 bg-gray-50 hover:bg-gray-100 rounded-lg flex items-center justify-center transition-colors"
-                >
-                  <Pencil className="w-3.5 h-3.5 text-gray-600" />
-                </button>
-                <button
-                  onClick={() => deleteProduct(p)}
-                  className="w-8 h-8 bg-red-50 hover:bg-red-100 rounded-lg flex items-center justify-center transition-colors"
-                >
-                  <Trash2 className="w-3.5 h-3.5 text-red-500" />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
       {modal.open && (
         <ProductFormModal
+          key={modal.seriesProducts?.map(p => p.id).join(",") ?? (modal.product?._id ?? "new")}
           initial={modal.product}
+          seriesProducts={modal.seriesProducts ?? undefined}
           onSave={fetchProducts}
-          onClose={() => setModal({ open: false, product: null })}
+          onClose={() => setModal({ open: false, product: null, seriesProducts: null })}
           showToast={showToast}
         />
       )}
