@@ -23,7 +23,7 @@ const About = () => (
     <div className="bg-toyo-dark py-16 px-6">
       <div className="max-w-7xl mx-auto">
         <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About TOYO</p>
-        <h1 className="text-4xl font-black text-white">Company Profile</h1>
+        <h1 className="text-4xl font-black text-white">Company Profiles</h1>
       </div>
     </div>
 
