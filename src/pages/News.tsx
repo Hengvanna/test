@@ -1,12 +1,78 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+
+/** Latest news from TOYO Robot (https://www.toyorobot.com/News/Msg) - kept in sync manually */
+const TOYO_ROBOT_NEWS_URL = "https://www.toyorobot.com/News/Msg";
+const TOYO_EXTERNAL_NEWS: { title: string; date: string; excerpt: string; link?: string }[] = [
+  {
+    title: "TOYO Automation and Yamaha Motor Establish Joint Venture — TY ROBOTICS Co., Ltd.",
+    date: "2025/11/18",
+    excerpt: "Integrating production and sharing resources to strengthen industrial robot competitiveness. TY ROBOTICS Co., Ltd. was established in August 2025, scheduled to begin production in January 2026.",
+    link: "https://global.yamaha-motor.com/news/2025/1014/ty.html",
+  },
+];
 
 const tabs = [
   { label: "News", href: "/news" },
   { label: "Event News", href: "/news/event" },
   { label: "Company Announcements", href: "/news/announcements" },
 ];
+
+/** Local campaign / product images (in public/images/news/) */
+const FEATURED_IMAGES = [
+  { src: "/images/news/ehc-series-compact-cylinder.png", alt: "EHC Series Compact Electric Cylinder", title: "EHC Series — Compact Electric Cylinder" },
+  { src: "/images/news/strong-technical-service.png", alt: "STRONG Technical Service", title: "STRONG Technical Service" },
+  { src: "/images/news/taiwan-excellence-2022-lgw.png", alt: "Taiwan Excellence 2022 — LGW Series Linear Motor Robot", title: "Taiwan Excellence 2022 — LGW Series" },
+  { src: "/images/news/taiwan-excellence-2022.png", alt: "Taiwan Excellence 2022 Award", title: "Taiwan Excellence 2022" },
+  { src: "/images/news/nano-system-lbt-lxy.png", alt: "TOYO NANO SYSTEM LBT and LXY Series", title: "NANO SYSTEM — LBT & LXY Series" },
+  { src: "/images/news/cglth-cgltb-low-profile.png", alt: "CGLTH and CGLTB Series Low Profile Electric Cylinders", title: "CGLTH / CGLTB — Low Profile Electric Cylinders" },
+  { src: "/images/news/gth-series-linear-actuator.png", alt: "GTH Series High Rigidity Linear Actuator", title: "GTH Series — High Rigidity Linear Actuator" },
+];
+
+function ToyoRobotNewsSection() {
+  return (
+    <div className="pt-6 border-t border-gray-200">
+      <div className="flex items-center justify-between gap-4 mb-4">
+        <h2 className="text-xl font-black text-gray-900">News from TOYO Robot</h2>
+        <a
+          href={TOYO_ROBOT_NEWS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-toyo-red hover:underline"
+        >
+          View all at toyorobot.com <ExternalLink className="w-4 h-4" />
+        </a>
+      </div>
+      <p className="text-sm text-gray-500 mb-6">
+        Latest updates from TOYO Robot — news, events, and company announcements.
+      </p>
+      <div className="space-y-6">
+        {TOYO_EXTERNAL_NEWS.map((item, i) => (
+          <article key={i} className="border border-gray-200 p-5 hover:border-toyo-red transition-colors">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs text-gray-400 font-mono">News updated: {item.date}</span>
+              <span className="border border-toyo-red text-toyo-red text-[10px] px-1.5 py-0.5 font-bold uppercase">News</span>
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
+            <p className="text-sm text-gray-600 leading-relaxed mb-3">{item.excerpt}</p>
+            {item.link && (
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-sm font-semibold text-toyo-red hover:underline"
+              >
+                Read more <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface NewsItem {
   id: string;
@@ -91,6 +157,26 @@ const News = () => {
         </div>
       </section>
 
+      {/* Featured campaigns / product images */}
+      <section className="py-8 px-6">
+        <div className="max-w-7xl mx-auto">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Featured campaigns & product highlights</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {FEATURED_IMAGES.map((img, i) => (
+              <div key={i} className="border border-gray-200 overflow-hidden bg-white hover:border-toyo-red transition-colors">
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  title={img.title}
+                  className="w-full h-44 object-cover object-center"
+                />
+                <p className="p-3 text-sm font-medium text-gray-700 line-clamp-2">{img.title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Content */}
       <section className="py-8 px-6">
         <div className="max-w-7xl mx-auto">
@@ -109,7 +195,11 @@ const News = () => {
               ))}
             </div>
           ) : items.length === 0 ? (
-            <div className="py-20 text-center text-gray-400 text-sm">No news available yet.</div>
+            <div className="py-12">
+              <div className="py-8 text-center text-gray-400 text-sm">No local news available yet.</div>
+              {/* Show TOYO Robot news even when no local news */}
+              <ToyoRobotNewsSection />
+            </div>
           ) : (
             <>
               {/* Featured / Latest article */}
@@ -191,6 +281,11 @@ const News = () => {
                   </div>
                 </>
               )}
+
+              {/* News from TOYO Robot (https://www.toyorobot.com/News/Msg) */}
+              <div className="mt-14">
+                <ToyoRobotNewsSection />
+              </div>
             </>
           )}
         </div>

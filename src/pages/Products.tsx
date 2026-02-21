@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
-import { Search, Filter, Package, FileText, Download } from "lucide-react";
+import { Search, Filter, Package, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Product {
   id: string;
@@ -31,6 +37,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [activeCat, setActiveCat] = useState("All");
+  const [detailProduct, setDetailProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     supabase
@@ -201,18 +208,28 @@ const Products = () => {
                       )}
                     </div>
 
-                    {/* Model list */}
+                    {/* Model list — click model number to show detail */}
                     <div className="flex-1 min-w-0">
                       {series.models.length > 0 ? (
                         <ul>
-                          {series.models.map(model => (
-                            <li
-                              key={model}
-                              className="text-sm text-gray-800 py-2 border-b border-gray-100 last:border-b-0 hover:text-toyo-red cursor-pointer transition-colors"
-                            >
-                              {model}
-                            </li>
-                          ))}
+                          {series.models.map(model => {
+                            const productForModel = products.find(
+                              p => p.name === series.name && p.model === model
+                            );
+                            return (
+                              <li
+                                key={model}
+                                onClick={() => productForModel && setDetailProduct(productForModel)}
+                                className={`text-sm py-2 border-b border-gray-100 last:border-b-0 transition-colors ${
+                                  productForModel
+                                    ? "text-gray-800 hover:text-toyo-red cursor-pointer"
+                                    : "text-gray-800"
+                                }`}
+                              >
+                                {model}
+                              </li>
+                            );
+                          })}
                         </ul>
                       ) : (
                         <p className="text-sm text-gray-400 italic">No models listed</p>
@@ -268,6 +285,93 @@ const Products = () => {
           )}
         </div>
       </section>
+
+      {/* Product detail dialog */}
+      <Dialog open={!!detailProduct} onOpenChange={open => !open && setDetailProduct(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl">
+              {detailProduct?.name}
+              {detailProduct?.model && (
+                <span className="text-toyo-red font-normal ml-2">{detailProduct.model}</span>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          {detailProduct && (
+            <div className="space-y-4 pt-2">
+              {detailProduct.description && (
+                <p className="text-sm text-gray-600">{detailProduct.description}</p>
+              )}
+              {detailProduct.image_url && (
+                <div className="flex justify-center">
+                  <img
+                    src={detailProduct.image_url}
+                    alt={detailProduct.name}
+                    className="max-h-48 object-contain rounded"
+                  />
+                </div>
+              )}
+              {detailProduct.specs && detailProduct.specs.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2">Specifications</h4>
+                  <table className="w-full text-sm border border-gray-200 rounded overflow-hidden">
+                    <tbody>
+                      {detailProduct.specs.map((spec, i) => (
+                        <tr
+                          key={i}
+                          className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                        >
+                          <td className="px-3 py-2 font-medium text-gray-700 border-b border-gray-200 w-1/3">
+                            {spec.key}
+                          </td>
+                          <td className="px-3 py-2 text-gray-800 border-b border-gray-200">
+                            {spec.value}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              <div className="flex flex-wrap gap-3 pt-2 border-t border-gray-100">
+                {detailProduct.catalog_url && (
+                  <a
+                    href={detailProduct.catalog_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-toyo-red hover:underline"
+                  >
+                    <Download className="w-4 h-4" />
+                    PDF Catalog
+                  </a>
+                )}
+                {detailProduct.drawing_2d_url && (
+                  <a
+                    href={detailProduct.drawing_2d_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:underline"
+                  >
+                    <Download className="w-4 h-4" />
+                    2D Drawing
+                  </a>
+                )}
+                {detailProduct.drawing_3d_url && (
+                  <a
+                    href={detailProduct.drawing_3d_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:underline"
+                  >
+                    <Download className="w-4 h-4" />
+                    3D Model
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
