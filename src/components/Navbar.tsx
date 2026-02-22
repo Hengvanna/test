@@ -141,7 +141,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Right: TOYO Logo */}
+          {/* Right: HSF Logo */}
           <div className="ml-auto">
             <Link to="/">
               <img src={hsfLogo} alt="HSF Logo" className="h-16" />
