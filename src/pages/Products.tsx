@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Search, Filter, Package, Download } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Search, Filter, Package, Download, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
@@ -253,30 +254,31 @@ const Products = () => {
                           <Download className="w-3.5 h-3.5 text-gray-500" />
                         </a>
                       )}
-                      {series.drawing_2d_url && (
-                        <a
-                          href={series.drawing_2d_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Download 2D Drawing"
-                          className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity"
-                        >
-                          <div className="bg-gray-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">2D</div>
-                          <Download className="w-3.5 h-3.5 text-gray-500" />
-                        </a>
-                      )}
-                      {series.drawing_3d_url && (
-                        <a
-                          href={series.drawing_3d_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          title="Download 3D Model"
-                          className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity"
-                        >
-                          <div className="bg-gray-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">3D</div>
-                          <Download className="w-3.5 h-3.5 text-gray-500" />
-                        </a>
-                      )}
+                      <Link
+                        to="/download?category=drawings"
+                        title="Download 2D Drawing"
+                        className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity"
+                      >
+                        <div className="bg-gray-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">2D</div>
+                        <Download className="w-3.5 h-3.5 text-gray-500" />
+                      </Link>
+                      <Link
+                        to="/download?category=drawings"
+                        title="Download 3D Model"
+                        className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity"
+                      >
+                        <div className="bg-gray-700 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">3D</div>
+                        <Download className="w-3.5 h-3.5 text-gray-500" />
+                      </Link>
+                      <Link
+                        to="/contact"
+                        title="Support"
+                        className="flex flex-col items-center gap-0.5 hover:opacity-70 transition-opacity"
+                      >
+                        <div className="border border-gray-400 rounded-sm p-1 flex items-center justify-center">
+                          <Headphones className="w-3.5 h-3.5 text-gray-600" />
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -345,28 +347,27 @@ const Products = () => {
                     PDF Catalog
                   </a>
                 )}
-                {detailProduct.drawing_2d_url && (
-                  <a
-                    href={detailProduct.drawing_2d_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:underline"
-                  >
-                    <Download className="w-4 h-4" />
-                    2D Drawing
-                  </a>
-                )}
-                {detailProduct.drawing_3d_url && (
-                  <a
-                    href={detailProduct.drawing_3d_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:underline"
-                  >
-                    <Download className="w-4 h-4" />
-                    3D Model
-                  </a>
-                )}
+                <Link
+                  to="/download?category=drawings"
+                  className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:underline"
+                >
+                  <Download className="w-4 h-4" />
+                  2D Drawing
+                </Link>
+                <Link
+                  to="/download?category=drawings"
+                  className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:underline"
+                >
+                  <Download className="w-4 h-4" />
+                  3D Model
+                </Link>
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-1.5 text-sm text-toyo-red hover:underline"
+                >
+                  <Headphones className="w-4 h-4" />
+                  Support
+                </Link>
               </div>
             </div>
           )}

@@ -146,8 +146,6 @@ function ProductFormModal({
       published: form.published,
       sort_order: form.sort_order,
       catalog_url: form.catalog_url || null,
-      drawing_2d_url: form.drawing_2d_url || null,
-      drawing_3d_url: form.drawing_3d_url || null,
     };
 
     if (isEdit) {
@@ -323,24 +321,6 @@ function ProductFormModal({
                   value={form.catalog_url || ""}
                   onChange={e => set("catalog_url", e.target.value)}
                   placeholder="https://... (PDF catalog link)"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-toyo-red"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">2D Drawing URL</label>
-                <input
-                  value={form.drawing_2d_url || ""}
-                  onChange={e => set("drawing_2d_url", e.target.value)}
-                  placeholder="https://... (2D drawing download link)"
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-toyo-red"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 mb-1 block">3D Model URL</label>
-                <input
-                  value={form.drawing_3d_url || ""}
-                  onChange={e => set("drawing_3d_url", e.target.value)}
-                  placeholder="https://... (3D model download link)"
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-toyo-red"
                 />
               </div>

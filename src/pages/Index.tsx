@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { ArrowRight, FileDown, Download, Search, Mail, ChevronLeft, ChevronRight, Zap, Gauge, Leaf, Shield, Plug, Globe } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import heroBanner from "@/assets/hero-banner.jpg";
+import heroLgwSeries from "@/assets/hero-lgw-series.png";
+import heroNanoSystem from "@/assets/hero-nano-system.png";
+import heroElectricGripper from "@/assets/hero-electric-gripper.png";
 import productCpsg from "@/assets/product-cpsg.jpg";
 import productGth from "@/assets/product-gth.jpg";
 import productEhc from "@/assets/product-ehc.jpg";
@@ -35,6 +38,30 @@ const heroSlides = [
     desc: "Space-saving design with powerful performance for compact automation needs",
     specs: ["Ultra-compact body", "Max speed 800mm/s", "Clean room compatible"],
   },
+  {
+    img: heroLgwSeries,
+    badge: "TAIWAN EXCELLENCE 2022",
+    title: "LGW Series",
+    subtitle: "Linear motor robot",
+    desc: "Award-winning linear motor robot recognized for excellence in precision and performance.",
+    specs: ["Award-winning design", "High precision performance", "Advanced automation technology"],
+  },
+  {
+    img: heroNanoSystem,
+    badge: "TAIWAN EXCELLENCE 2024",
+    title: "TOYO NANO SYSTEM",
+    subtitle: "LBT series Air Bearing Stage · LXY series Alignment Stage",
+    desc: "Precision stages with air bearing and alignment technology. Zero wear, zero maintenance, cleanroom Class 1.",
+    specs: ["LBT: ±0.2µm/300mm accuracy, 0.5µm straightness, zero wear, no lubrication", "LXY: Embedded track 44mm, 0.1% speed ripple, Crossed-Roller Guide, ±0.25µm", "U-shaped & Rod-type linear motors"],
+  },
+  {
+    img: heroElectricGripper,
+    badge: "CHG2 / CHY / DHY",
+    title: "ELECTRIC GRIPPER",
+    subtitle: "Suitable for collaborative robots, six-axis robots",
+    desc: "Highly versatile electric grippers with simple assembly, quick import, and easy programming via UI software.",
+    specs: ["Simple Assembly — Including hardware and software", "Quick Import — Install and use in the least amount of time", "Easy To Program — Set and use with UI software"],
+  },
 ];
 
 const quickLinks = [
@@ -45,6 +72,7 @@ const quickLinks = [
 ];
 
 const productCards = [
+  
   {
     img: productCpsg,
     badge: "Miniature Cylinder",
@@ -77,6 +105,7 @@ const productCards = [
     tags: ["Multi-axis", "High Speed", "Modular Design"],
     href: "/products?cat=desktop",
   },
+ 
 ];
 
 const stats = [

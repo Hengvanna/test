@@ -58,6 +58,25 @@ const About = () => (
       </div>
     </section>
 
+    {/* YouTube: TOYO GLTH/GLTB Series */}
+    <section className="py-16 px-6 bg-toyo-light-gray">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-2xl font-black text-toyo-dark mb-6 text-center">See TOYO in Action</h2>
+        <p className="text-toyo-gray text-center mb-8 max-w-2xl mx-auto">
+          GLTH / GLTB Series — flat-type embedded electric slides: low height, high rigidity.
+        </p>
+        <div className="aspect-video w-full rounded-lg overflow-hidden shadow-lg bg-black">
+          <iframe
+            title="TOYO ROBOT GLTH / GLTB Series"
+            src="https://www.youtube.com/embed/miD-k8X2E50"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
+      </div>
+    </section>
+
     {/* Timeline */}
     <section className="py-16 px-6 bg-toyo-light-gray">
       <div className="max-w-4xl mx-auto">

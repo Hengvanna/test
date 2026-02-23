@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Download, FileText, Box, BookOpen, Monitor, Award, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -51,10 +52,21 @@ const detectLang = (name: string): string | null => {
   return null;
 };
 
+const CATEGORY_IDS = ["catalogs", "drawings", "manuals", "software", "certificates"];
+
 const DownloadPage = () => {
-  const [activeCat, setActiveCat] = useState("catalogs");
+  const [searchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const initialCat = categoryParam && CATEGORY_IDS.includes(categoryParam) ? categoryParam : "catalogs";
+  const [activeCat, setActiveCat] = useState(initialCat);
   const [items, setItems] = useState<DownloadItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (categoryParam && CATEGORY_IDS.includes(categoryParam)) {
+      setActiveCat(categoryParam);
+    }
+  }, [categoryParam]);
 
   useEffect(() => {
     (supabase as any)
