@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Download, FileText, Box, BookOpen, Monitor, Award, Package } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { PdfFirstPageThumb } from "@/components/PdfFirstPageThumb";
 
 const CATEGORIES = [
   { id: "catalogs", label: "Product Catalogs", icon: FileText },
@@ -35,12 +36,24 @@ const isImage = (item: DownloadItem) => ["jpg", "jpeg", "png", "gif", "webp"].in
   item.file_path?.split(".").pop()?.toLowerCase() || ""
 );
 
+const isPdf = (item: DownloadItem) =>
+  item.file_path?.toLowerCase().endsWith(".pdf") ?? false;
+
+// Language badge colors matching reference (CN=red, EN=dark blue, JP=green, TH=purple)
 const langBadgeColor: Record<string, string> = {
-  EN: "bg-blue-600",
+  EN: "bg-blue-700",
   CN: "bg-red-600",
-  JP: "bg-red-700",
+  JP: "bg-green-600",
   KR: "bg-blue-500",
-  TH: "bg-yellow-500",
+  TH: "bg-purple-600",
+};
+
+const langLabel: Record<string, string> = {
+  EN: "英文版",
+  CN: "中文版",
+  JP: "日本語版",
+  TH: "泰文版",
+  KR: "한국어",
 };
 
 // Try to detect language from filename
@@ -51,6 +64,9 @@ const detectLang = (name: string): string | null => {
   }
   return null;
 };
+
+const formatUpdateDate = (dateStr: string) =>
+  new Date(dateStr).toLocaleDateString("en-CA", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/-/g, ".");
 
 const CATEGORY_IDS = ["catalogs", "drawings", "manuals", "software", "certificates"];
 
@@ -69,16 +85,21 @@ const DownloadPage = () => {
   }, [categoryParam]);
 
   useEffect(() => {
-    (supabase as any)
-      .from("downloads")
-      .select("id, name, category, file_url, file_path, file_size, file_type, revision, updated_at")
-      .eq("published", true)
-      .order("sort_order", { ascending: true })
-      .order("created_at", { ascending: false })
-      .then(({ data }: { data: DownloadItem[] | null }) => {
-        setItems(data || []);
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase
+        .from("downloads")
+        .select("id, name, category, file_url, file_path, file_size, file_type, revision, updated_at")
+        .eq("published", true)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
+      if (!cancelled) {
+        if (error) console.error("Download fetch error:", error);
+        setItems(data ?? []);
         setLoading(false);
-      });
+      }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   const filtered = items.filter((d) => d.category === activeCat);
@@ -159,44 +180,62 @@ const DownloadPage = () => {
                 <p className="text-sm text-gray-400">No files in this category yet.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
                 {filtered.map((file) => {
                   const lang = detectLang(file.name);
                   const fmt = getFormat(file);
                   const img = isImage(file);
+                  const pdf = isPdf(file);
                   return (
-                    <div key={file.id} className="group">
-                      {/* Thumbnail card */}
-                      <div className="border border-gray-200 bg-gray-50 aspect-[3/4] flex items-center justify-center overflow-hidden relative mb-2">
+                    <div key={file.id} className="group flex flex-col">
+                      {/* Thumbnail */}
+                      <div className="border border-gray-200 bg-white aspect-[3/4] flex items-center justify-center overflow-hidden relative mb-3">
                         {img ? (
                           <img src={file.file_url} alt={file.name} className="w-full h-full object-cover" />
+                        ) : pdf ? (
+                          <PdfFirstPageThumb
+                            src={file.file_url}
+                            alt={file.name}
+                            className="w-full h-full object-cover object-top"
+                            fallback={
+                              <div className="flex flex-col items-center justify-center gap-3 w-full h-full p-6">
+                                <FileText className="w-16 h-16 text-gray-300 stroke-[1.5]" strokeWidth={1.5} />
+                                <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">{fmt}</span>
+                              </div>
+                            }
+                          />
                         ) : (
-                          <div className="flex flex-col items-center justify-center gap-2 p-4 text-center">
-                            <FileText className="w-10 h-10 text-gray-300" />
-                            <span className="text-xs text-gray-400 font-mono">{fmt}</span>
+                          <div className="flex flex-col items-center justify-center gap-3 w-full h-full p-6">
+                            <FileText className="w-16 h-16 text-gray-300 stroke-[1.5]" strokeWidth={1.5} />
+                            <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">{fmt}</span>
                           </div>
                         )}
-                        {/* Lang badge */}
-                        {lang && (
-                          <span className={`absolute top-2 right-2 text-[10px] font-bold text-white px-1.5 py-0.5 ${langBadgeColor[lang] || "bg-gray-600"}`}>
-                            {lang}
-                          </span>
+                      </div>
+                      {/* Language: "中文版 CN" with colored badge */}
+                      <div className="flex items-center gap-1.5 mb-1">
+                        {lang ? (
+                          <>
+                            <span className="text-sm text-gray-900">{langLabel[lang] ?? lang}</span>
+                            <span className={`text-xs font-bold text-white px-2 py-0.5 ${langBadgeColor[lang] || "bg-gray-600"}`}>
+                              {lang}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-sm text-gray-500">—</span>
                         )}
                       </div>
-                      {/* Name */}
-                      <p className="text-xs font-semibold text-gray-800 leading-snug mb-1 line-clamp-2">{file.name}</p>
-                      {/* Date + size */}
-                      <p className="text-[11px] text-gray-400 mb-2">
-                        Updates : {new Date(file.updated_at).toLocaleDateString("en", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, ".")}
+                      {/* Update date: 更新: YYYY.MM.DD */}
+                      <p className="text-xs text-gray-500 mb-3">
+                        更新: {file.updated_at ? formatUpdateDate(file.updated_at) : "—"}
                       </p>
-                      {/* Download button */}
+                      {/* Download */}
                       <button
                         onClick={() => window.open(file.file_url, "_blank")}
-                        className="flex items-center gap-1 border border-gray-300 px-2 py-1 text-[11px] text-gray-600 hover:border-toyo-red hover:text-toyo-red transition-colors"
-                        title="Download"
+                        className="mt-auto flex flex-col items-center justify-center gap-0.5 w-14 h-14 bg-gray-900 text-white border border-gray-700 hover:bg-gray-800 transition-colors"
+                        title="Download PDF"
                       >
-                        <span className="text-[10px] font-bold text-toyo-red">{fmt}</span>
-                        <Download className="w-3 h-3" />
+                        <span className="text-[10px] font-bold leading-none">PDF</span>
+                        <Download className="w-3.5 h-3.5" strokeWidth={2.5} />
                       </button>
                     </div>
                   );
@@ -206,6 +245,7 @@ const DownloadPage = () => {
           </div>
         </div>
       </section>
+
     </div>
   );
 };
