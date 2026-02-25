@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import { FileText } from "lucide-react";
 
-// Vite: use ?url so worker is resolved from node_modules
+// Vite: ?url resolves worker from node_modules (path includes base in production).
 // @ts-expect-error - Vite resolves ?url for worker
 import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
@@ -37,8 +37,15 @@ export function PdfFirstPageThumb({ src, alt = "PDF", className, fallback }: Pdf
 
     const load = async () => {
       try {
+        // Fetch PDF first so CORS is handled in one place; pass ArrayBuffer to PDF.js.
+        // This helps when the app is deployed on a different origin than the storage (e.g. Supabase).
+        const res = await fetch(src, { mode: "cors" });
+        if (!res.ok) throw new Error(`PDF fetch ${res.status}`);
+        const arrayBuffer = await res.arrayBuffer();
+        if (cancelledRef.current) return;
+
         const loadingTask = pdfjsLib.getDocument({
-          url: src,
+          data: arrayBuffer,
           verbosity: 0,
         });
         const pdf = await loadingTask.promise;
@@ -69,7 +76,10 @@ export function PdfFirstPageThumb({ src, alt = "PDF", className, fallback }: Pdf
         if (cancelledRef.current) return;
         setThumbUrl(canvas.toDataURL("image/jpeg", 0.85));
       } catch (e) {
-        if (!cancelledRef.current) setError(true);
+        if (!cancelledRef.current) {
+          setError(true);
+          console.warn("[PdfFirstPageThumb] Could not load first page (check CORS or URL):", src, e);
+        }
       }
     };
 
