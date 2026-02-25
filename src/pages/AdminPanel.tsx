@@ -940,6 +940,7 @@ export default function AdminPanel() {
       <header className="bg-white border-b border-gray-100 sticky top-0 z-30 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-4">
+            <img src="/HSF_Logo.png" alt="HSF" className="h-8" />
             <span className="text-toyo-red font-black text-xl tracking-widest">HSF</span>
             <span className="h-5 w-px bg-gray-200" />
             <span className="text-sm font-semibold text-gray-600">Admin Panel</span>
