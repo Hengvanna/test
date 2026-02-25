@@ -1,15 +1,19 @@
 import { useEffect, useState, useRef } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import { FileText } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 // Vite: ?url resolves worker from node_modules (path includes base in production).
-// @ts-expect-error - Vite resolves ?url for worker
 import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 interface PdfFirstPageThumbProps {
-  /** Public URL of the PDF (must be CORS-enabled for cross-origin) */
-  src: string;
+  /** Public URL of the PDF (use when storagePath is not set; requires CORS on storage) */
+  src?: string;
+  /** Prefer this when using Supabase: path in storage bucket (e.g. "downloads/xxx.pdf"). Avoids CORS. */
+  storagePath?: string;
+  /** Storage bucket name (default "media") when using storagePath */
+  storageBucket?: string;
   alt?: string;
   className?: string;
   /** Fallback when PDF fails to load or render */
@@ -19,8 +23,18 @@ interface PdfFirstPageThumbProps {
 /**
  * Renders the first page of a PDF as an image thumbnail using PDF.js.
  * Use for card covers on the Download page.
+ * Prefer storagePath over src when using Supabase so thumbnails work on localhost and deployed sites.
+ * If thumbnails still show the placeholder: in Supabase Dashboard → Storage → media bucket → CORS,
+ * add allowed origins (e.g. http://localhost:5173 and your production URL).
  */
-export function PdfFirstPageThumb({ src, alt = "PDF", className, fallback }: PdfFirstPageThumbProps) {
+export function PdfFirstPageThumb({
+  src,
+  storagePath,
+  storageBucket = "media",
+  alt = "PDF",
+  className,
+  fallback,
+}: PdfFirstPageThumbProps) {
   const [thumbUrl, setThumbUrl] = useState<string | null>(null);
   const [error, setError] = useState(false);
   const cancelledRef = useRef(false);
@@ -30,18 +44,29 @@ export function PdfFirstPageThumb({ src, alt = "PDF", className, fallback }: Pdf
     setError(false);
     setThumbUrl(null);
 
-    if (!src) return;
+    const source = storagePath ?? src;
+    if (!source) return;
 
     const scale = 2; // Slightly higher for crisp thumbnail
     let canvas: HTMLCanvasElement | null = null;
 
     const load = async () => {
       try {
-        // Fetch PDF first so CORS is handled in one place; pass ArrayBuffer to PDF.js.
-        // This helps when the app is deployed on a different origin than the storage (e.g. Supabase).
-        const res = await fetch(src, { mode: "cors" });
-        if (!res.ok) throw new Error(`PDF fetch ${res.status}`);
-        const arrayBuffer = await res.arrayBuffer();
+        let arrayBuffer: ArrayBuffer;
+        if (storagePath) {
+          // Load via Supabase client — works on localhost and server without extra CORS config
+          const { data, error: downloadError } = await supabase.storage
+            .from(storageBucket)
+            .download(storagePath);
+          if (downloadError || !data) throw new Error(downloadError?.message ?? "Download failed");
+          arrayBuffer = await data.arrayBuffer();
+        } else if (src) {
+          const res = await fetch(src, { mode: "cors" });
+          if (!res.ok) throw new Error(`PDF fetch ${res.status}`);
+          arrayBuffer = await res.arrayBuffer();
+        } else {
+          return;
+        }
         if (cancelledRef.current) return;
 
         const loadingTask = pdfjsLib.getDocument({
@@ -71,6 +96,7 @@ export function PdfFirstPageThumb({ src, alt = "PDF", className, fallback }: Pdf
           canvasContext: ctx,
           viewport,
           intent: "display",
+          canvas,
         }).promise;
 
         if (cancelledRef.current) return;
@@ -78,7 +104,7 @@ export function PdfFirstPageThumb({ src, alt = "PDF", className, fallback }: Pdf
       } catch (e) {
         if (!cancelledRef.current) {
           setError(true);
-          console.warn("[PdfFirstPageThumb] Could not load first page (check CORS or URL):", src, e);
+          console.warn("[PdfFirstPageThumb] Could not load first page:", storagePath ?? src, e);
         }
       }
     };
@@ -87,7 +113,7 @@ export function PdfFirstPageThumb({ src, alt = "PDF", className, fallback }: Pdf
     return () => {
       cancelledRef.current = true;
     };
-  }, [src]);
+  }, [src, storagePath, storageBucket]);
 
   if (error || !thumbUrl) {
     if (fallback) return <>{fallback}</>;

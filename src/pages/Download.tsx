@@ -194,6 +194,7 @@ const DownloadPage = () => {
                           <img src={file.file_url} alt={file.name} className="w-full h-full object-cover" />
                         ) : pdf ? (
                           <PdfFirstPageThumb
+                            storagePath={file.file_path}
                             src={file.file_url}
                             alt={file.name}
                             className="w-full h-full object-cover object-top"
