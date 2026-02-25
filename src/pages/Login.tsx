@@ -31,7 +31,7 @@ const Login = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/">
-            <span className="text-toyo-red font-black text-3xl tracking-widest">TOYO</span>
+            <span className="text-toyo-red font-black text-3xl tracking-widest">HSF</span>
           </Link>
           <p className="text-gray-500 text-sm mt-1">Sign in to your account</p>
         </div>

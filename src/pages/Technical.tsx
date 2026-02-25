@@ -3,10 +3,10 @@ import { ChevronDown, ChevronUp, Zap, Wind, CheckCircle, XCircle } from "lucide-
 
 const faqs = [
   { q: "What is the advantage of electric over pneumatic?", a: "Electric actuators offer programmable positioning, energy efficiency (no compressor), cleanliness (no air leaks or oil mist), and precise force/speed control that pneumatic systems cannot match." },
-  { q: "What is the repeatability of TOYO actuators?", a: "Standard models achieve ±0.01mm repeatability. High-precision variants reach ±0.005mm or better." },
-  { q: "Do TOYO products support EtherCAT?", a: "Yes. Our TD-5 series drivers and TC-10/15 controllers fully support EtherCAT, CC-Link, PROFIBUS, and Ethernet/IP fieldbus protocols." },
-  { q: "What industries use TOYO products?", a: "Semiconductors, electronics assembly, medical devices, automotive, food & beverage, and general factory automation." },
-  { q: "Are spare parts readily available?", a: "Yes. TOYO maintains a comprehensive spare parts inventory at our Taiwan HQ and regional warehouses. Most common parts ship within 48 hours." },
+  { q: "What is the repeatability of HSF actuators?", a: "Standard models achieve ±0.01mm repeatability. High-precision variants reach ±0.005mm or better." },
+  { q: "Do HSF products support EtherCAT?", a: "Yes. Our TD-5 series drivers and TC-10/15 controllers fully support EtherCAT, CC-Link, PROFIBUS, and Ethernet/IP fieldbus protocols." },
+  { q: "What industries use HSF products?", a: "Semiconductors, electronics assembly, medical devices, automotive, food & beverage, and general factory automation." },
+  { q: "Are spare parts readily available?", a: "Yes. HSF maintains a comprehensive spare parts inventory at our Taiwan HQ and regional warehouses. Most common parts ship within 48 hours." },
 ];
 
 const comparisonRows = [

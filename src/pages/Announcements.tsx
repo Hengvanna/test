@@ -3,7 +3,7 @@ import { SubNav } from "./News";
 const announcements = [
   { date: "2024-12-01", title: "Notice of Annual Holiday Schedule 2025" },
   { date: "2024-11-15", title: "Update on Technical Support Center Hours" },
-  { date: "2024-10-28", title: "TOYO ERP System Maintenance Notice – Nov 2" },
+  { date: "2024-10-28", title: "HSF ERP System Maintenance Notice – Nov 2" },
   { date: "2024-10-01", title: "Revision of Standard Warranty Terms Effective Jan 2025" },
   { date: "2024-09-12", title: "Opening of New Training Center in Tainan HQ" },
   { date: "2024-08-05", title: "Price List Update – Product Series 2024Q4" },

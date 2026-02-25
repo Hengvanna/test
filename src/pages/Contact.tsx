@@ -17,12 +17,12 @@ const Contact = () => {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
           {/* Info */}
           <div>
-            <h2 className="text-2xl font-black text-toyo-dark mb-6">TOYO Electric Corporation</h2>
+            <h2 className="text-2xl font-black text-toyo-dark mb-6">HSF Electric Corporation</h2>
             <div className="space-y-4 mb-8">
               {[
-                { icon: MapPin, label: "Headquarters", value: "No. 10, Gongye 2nd Rd., Xinshi Dist., Tainan City 744, Taiwan" },
-                { icon: Phone, label: "Phone", value: "+886-6-505-5000" },
-                { icon: Mail, label: "Email", value: "info@toyo.com.tw" },
+                { icon: MapPin, label: "Headquarters", value: "Phnom Penh, Cambodia" },
+                { icon: Phone, label: "Phone", value: "+855-12 555 947" },
+                { icon: Mail, label: "Email", value: "nakvsk@gmail.com" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex gap-4 items-start">
                   <div className="w-10 h-10 bg-toyo-red/10 flex items-center justify-center flex-shrink-0">
@@ -30,7 +30,13 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="text-xs font-semibold text-toyo-gray uppercase tracking-wide">{label}</p>
-                    <p className="text-toyo-dark text-sm">{value}</p>
+                    {label === "Email" ? (
+                      <a href={`mailto:${value}`} className="text-toyo-dark text-sm hover:text-toyo-red transition-colors">
+                        {value}
+                      </a>
+                    ) : (
+                      <p className="text-toyo-dark text-sm">{value}</p>
+                    )}
                   </div>
                 </div>
               ))}

@@ -65,17 +65,16 @@ const Footer = () => {
             <h4 className="text-white font-bold text-sm uppercase tracking-widest mb-5">Contact</h4>
             <ul className="space-y-2">
               <li style={{ color: "hsl(var(--toyo-gray))" }} className="text-sm leading-snug">
-                No. 10, Gongye 2nd Rd.<br />
-                Xinshi Dist., Tainan City<br />
-                Taiwan 744
+                Phnom Penh<br />
+                Cambodia
               </li>
               <li>
                 <a
-                  href="mailto:info@toyo.com.tw"
+                  href="mailto:nakvsk@gmail.com"
                   style={{ color: "hsl(var(--toyo-gray))" }}
                   className="text-sm hover:text-white transition-colors"
                 >
-                  info@toyo.com.tw
+                  nakvsk@gmail.com
                 </a>
               </li>
             </ul>
@@ -87,7 +86,7 @@ const Footer = () => {
       <div style={{ borderColor: "hsl(var(--toyo-gray) / 0.2)" }} className="border-t">
         <div className="max-w-7xl mx-auto px-8 py-5 flex items-center justify-center">
           <span style={{ color: "hsl(var(--toyo-gray))" }} className="text-xs">
-            © 2024 TOYO Electric Corporation. All rights reserved.
+            © 2026 HSF Electric Corporation. All rights reserved.
           </span>
         </div>
       </div>

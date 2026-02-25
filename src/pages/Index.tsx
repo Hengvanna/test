@@ -49,7 +49,7 @@ const heroSlides = [
   {
     img: heroNanoSystem,
     badge: "TAIWAN EXCELLENCE 2024",
-    title: "TOYO NANO SYSTEM",
+    title: "HSF NANO SYSTEM",
     subtitle: "LBT series Air Bearing Stage · LXY series Alignment Stage",
     desc: "Precision stages with air bearing and alignment technology. Zero wear, zero maintenance, cleanroom Class 1.",
     specs: ["LBT: ±0.2µm/300mm accuracy, 0.5µm straightness, zero wear, no lubrication", "LXY: Embedded track 44mm, 0.1% speed ripple, Crossed-Roller Guide, ±0.25µm", "U-shaped & Rod-type linear motors"],
@@ -204,7 +204,7 @@ const Index = () => {
       {/* Company intro */}
       <section className="py-16 px-6 text-center bg-white">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">
-          Industry Leading Electric Actuator Manufacturer &gt; TOYO Robot
+          Industry Leading Electric Actuator Manufacturer &gt; HSF Robot
         </h2>
         <p className="text-toyo-red text-sm max-w-xl mx-auto mb-2">
           The largest, aluminum extrusion, electro-mechanical, linear actuator manufacturer, in Taiwan and Mainland China.
@@ -293,7 +293,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
             <p className="text-toyo-red text-xs font-bold uppercase tracking-widest mb-2">Why Choose Us</p>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">The TOYO Advantage</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">The HSF Advantage</h2>
             <p className="text-gray-500 text-sm">Leading innovation in electric actuator technology for over three decades.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -310,7 +310,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* News Section — 2 columns like TOYO */}
+      {/* News Section — 2 columns like HSF */}
       {(latestEvents.length > 0 || latestAnnouncements.length > 0) && (
         <section className="py-16 px-6 bg-gray-50 border-t border-gray-200">
           <div className="max-w-7xl mx-auto">

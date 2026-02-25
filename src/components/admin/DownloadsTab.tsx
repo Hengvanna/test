@@ -133,7 +133,7 @@ function AddFileModal({
             <input
               value={name}
               onChange={e => setName(e.target.value)}
-              placeholder="e.g. TOYO Product Catalog 2024"
+              placeholder="e.g. HSF Product Catalog 2024"
               className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-red-400"
             />
           </div>

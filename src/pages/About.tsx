@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Award, Shield, Clock, Users } from "lucide-react";
 
 const timeline = [
-  { year: "1991", event: "TOYO Electric Corporation founded in Tainan, Taiwan." },
+  { year: "1991", event: "HSF Electric Corporation founded in Tainan, Taiwan." },
   { year: "1998", event: "Launched first electric actuator product line for industrial automation." },
   { year: "2003", event: "Expanded operations with new manufacturing facility." },
   { year: "2008", event: "Entered European and Southeast Asian markets." },
@@ -22,7 +22,7 @@ const About = () => (
   <div className="min-h-screen bg-background">
     <div className="bg-toyo-dark py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About TOYO</p>
+        <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About HSF</p>
         <h1 className="text-4xl font-black text-white">Company Profiles</h1>
       </div>
     </div>
@@ -32,7 +32,7 @@ const About = () => (
         <div>
           <h2 className="text-2xl font-black text-toyo-dark mb-4">Who We Are</h2>
           <p className="text-toyo-gray leading-relaxed mb-4">
-            TOYO Electric Corporation is a leading manufacturer of electric actuators, robotic systems, and industrial automation solutions. Founded in 1991 in Tainan, Taiwan, we have grown from a regional manufacturer to a global automation partner trusted by thousands of companies worldwide.
+            HSF Electric Corporation is a leading manufacturer of electric actuators, robotic systems, and industrial automation solutions. Founded in 1991 in Tainan, Taiwan, we have grown from a regional manufacturer to a global automation partner trusted by thousands of companies worldwide.
           </p>
           <p className="text-toyo-gray leading-relaxed mb-4">
             Our product portfolio spans electric actuators, motorized slides, linear motors, SCARA robots, Cartesian robots, controllers, and accessories — all designed with precision engineering and built to perform in the most demanding industrial environments.
@@ -58,16 +58,16 @@ const About = () => (
       </div>
     </section>
 
-    {/* YouTube: TOYO GLTH/GLTB Series */}
+    {/* YouTube: HSF GLTH/GLTB Series */}
     <section className="py-16 px-6 bg-toyo-light-gray">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-black text-toyo-dark mb-6 text-center">See TOYO in Action</h2>
+        <h2 className="text-2xl font-black text-toyo-dark mb-6 text-center">See HSF in Action</h2>
         <p className="text-toyo-gray text-center mb-8 max-w-2xl mx-auto">
           GLTH / GLTB Series — flat-type embedded electric slides: low height, high rigidity.
         </p>
         <div className="aspect-video w-full rounded-lg overflow-hidden shadow-lg bg-black">
           <iframe
-            title="TOYO ROBOT GLTH / GLTB Series"
+            title="HSF ROBOT GLTH / GLTB Series"
             src="https://www.youtube.com/embed/miD-k8X2E50"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -116,7 +116,7 @@ const About = () => (
     </section>
 
     <div className="text-center py-8 px-6 bg-toyo-red">
-      <p className="text-white font-bold text-lg mb-4">Ready to work with TOYO?</p>
+      <p className="text-white font-bold text-lg mb-4">Ready to work with HSF?</p>
       <Link to="/contact" className="inline-flex items-center gap-2 bg-white text-toyo-red px-6 py-3 font-bold hover:bg-white/90 transition-colors">
         Get In Touch <ArrowRight className="w-4 h-4" />
       </Link>

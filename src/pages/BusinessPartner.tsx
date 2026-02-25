@@ -40,7 +40,7 @@ const programs = [
   },
   {
     name: "System Integrator",
-    desc: "Partner with TOYO to integrate electric actuators into complete automation solutions for end customers.",
+    desc: "Partner with HSF to integrate electric actuators into complete automation solutions for end customers.",
     benefits: [
       "Project pricing support",
       "Engineering collaboration",
@@ -51,7 +51,7 @@ const programs = [
   },
   {
     name: "OEM Partner",
-    desc: "Incorporate TOYO actuators into your machinery and equipment with custom branding and specification options.",
+    desc: "Incorporate HSF actuators into your machinery and equipment with custom branding and specification options.",
     benefits: [
       "Custom specifications",
       "Private labeling options",
@@ -79,7 +79,7 @@ const BusinessPartner = () => (
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-black text-white mb-4">Business Partner Program</h1>
         <p className="text-base" style={{ color: "hsl(var(--toyo-gray))" }}>
-          Join TOYO's global partner network and grow your business with industry-leading electric actuator solutions.
+          Join HSF's global partner network and grow your business with industry-leading electric actuator solutions.
         </p>
       </div>
     </div>
@@ -97,7 +97,7 @@ const BusinessPartner = () => (
               Partner With Us
             </span>
             <h2 className="text-3xl font-black mb-4" style={{ color: "hsl(var(--toyo-dark))" }}>
-              Grow Together with TOYO
+              Grow Together with HSF
             </h2>
             <p className="text-sm leading-relaxed mb-8" style={{ color: "hsl(var(--toyo-gray))" }}>
               We are actively seeking qualified distributors, system integrators, and OEM partners worldwide.
@@ -137,7 +137,7 @@ const BusinessPartner = () => (
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <span className="text-xs font-bold uppercase tracking-widest" style={{ color: "hsl(var(--toyo-red))" }}>Benefits</span>
-          <h2 className="text-3xl font-black mt-2" style={{ color: "hsl(var(--toyo-dark))" }}>Why Partner with TOYO?</h2>
+          <h2 className="text-3xl font-black mt-2" style={{ color: "hsl(var(--toyo-dark))" }}>Why Partner with HSF?</h2>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {benefits.map((b) => {

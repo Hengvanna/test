@@ -12,7 +12,7 @@ const services = [
   {
     icon: Wrench,
     title: "Technical Support",
-    desc: "Dedicated engineers provide fast, expert assistance for installation, programming, and troubleshooting your TOYO systems.",
+    desc: "Dedicated engineers provide fast, expert assistance for installation, programming, and troubleshooting your HSF systems.",
   },
   {
     icon: HeadphonesIcon,
@@ -45,7 +45,7 @@ const QualityService = () => (
     {/* Hero */}
     <div className="bg-toyo-dark py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About TOYO</p>
+        <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About HSF</p>
         <h1 className="text-4xl font-black text-white">Quality & Service</h1>
         <p className="text-gray-400 mt-3 max-w-xl">
           30+ years of precision manufacturing, backed by international certifications and a global service network.
@@ -60,7 +60,7 @@ const QualityService = () => (
           <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">Our Commitment</p>
           <h2 className="text-3xl font-black text-toyo-dark mb-4">Quality is Not Optional</h2>
           <p className="text-toyo-gray leading-relaxed mb-4">
-            At TOYO, quality is embedded into every step of our process — from concept design to the moment a product reaches your factory floor. We hold ourselves to the highest international standards because our customers' operations depend on it.
+            At HSF, quality is embedded into every step of our process — from concept design to the moment a product reaches your factory floor. We hold ourselves to the highest international standards because our customers' operations depend on it.
           </p>
           <p className="text-toyo-gray leading-relaxed">
             Our quality management system is built around continuous improvement, real-time process monitoring, and a company-wide culture that treats defects as unacceptable — not just in finished products, but in every aspect of how we work.

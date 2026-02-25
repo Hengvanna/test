@@ -5,10 +5,10 @@ import hsfLogo from "@/assets/HSF_Logo.png";
 
 const megaMenuData = [
   {
-    col: "About TOYO",
+    col: "About HSF",
     sections: [
       {
-        title: "About TOYO",
+        title: "About HSF",
         links: [
           { label: "Company Introduction & History", href: "/about" },
           { label: "Quality & Service", href: "/about/service" },
@@ -87,12 +87,12 @@ const megaMenuData = [
       {
         title: "Business partner",
         links: [
-          { label: "TOYO ROBOTICS . Japan", href: "/business-partner" },
-          { label: "Toyo Nano System Co., Ltd.", href: "/business-partner" },
+          { label: "HSF ROBOTICS . Japan", href: "/business-partner" },
+          { label: "HSF Nano System Co., Ltd.", href: "/business-partner" },
           { label: "ECON ROBOT INC.", href: "/business-partner" },
           { label: "MSI Co., Ltd.", href: "/business-partner" },
-          { label: "TOYOROBOTICS KOREA", href: "/business-partner" },
-          { label: "TOYO ROBOTICS PRIVATE LIMITED INDIA", href: "/business-partner" },
+          { label: "HSF ROBOTICS KOREA", href: "/business-partner" },
+          { label: "HSF ROBOTICS PRIVATE LIMITED INDIA", href: "/business-partner" },
         ],
       },
     ],

@@ -108,7 +108,7 @@ const Products = () => {
         </div>
       </div>
 
-      {/* Section header like TOYO site */}
+      {/* Section header like HSF site */}
       <div className="border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center gap-4">
           <div className="bg-toyo-dark text-white text-sm font-bold px-4 py-2">

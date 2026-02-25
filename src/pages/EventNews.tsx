@@ -20,17 +20,17 @@ const GLOBAL_EXHIBITION_2025 = [
 ];
 
 const PAST_EVENTS: { date: string; type: string; title: string }[] = [
-  { date: "2024/04/29", type: "Exhibition", title: "【TOYO EVENTS】AUTOMATE USA 2024" },
-  { date: "2024/04/29", type: "Exhibition", title: "【TOYO EVENTS】2024 高雄自動化展" },
-  { date: "2023/11/03", type: "Seminar", title: "【TOYOROBOTICS KOREA】2023 Distributor Briefing" },
+  { date: "2024/04/29", type: "Exhibition", title: "【HSF EVENTS】AUTOMATE USA 2024" },
+  { date: "2024/04/29", type: "Exhibition", title: "【HSF EVENTS】2024 高雄自動化展" },
+  { date: "2023/11/03", type: "Seminar", title: "【HSF ROBOTICS KOREA】2023 Distributor Briefing" },
   { date: "2023/10/25", type: "Exhibition", title: "2023 Motion Control Show - KOREA" },
-  { date: "2023/10/19", type: "Exhibition", title: "【TOYO Events】2023 Motion Control Show - South KOREA" },
-  { date: "2023/09/04", type: "Exhibition", title: "【TOYO Events】2023 SEMICON TAIWAN" },
-  { date: "2023/08/10", type: "Exhibition", title: "【TOYO Events】2023 台北國際自動化工業大展" },
-  { date: "2023/04/17", type: "Exhibition", title: "【TOYO Events】Touch Taiwan 2023" },
+  { date: "2023/10/19", type: "Exhibition", title: "【HSF Events】2023 Motion Control Show - South KOREA" },
+  { date: "2023/09/04", type: "Exhibition", title: "【HSF Events】2023 SEMICON TAIWAN" },
+  { date: "2023/08/10", type: "Exhibition", title: "【HSF Events】2023 台北國際自動化工業大展" },
+  { date: "2023/04/17", type: "Exhibition", title: "【HSF Events】Touch Taiwan 2023" },
 ];
 
-const TOYO_EVENT_PAGE_URL = "https://www.toyorobot.com/News/Event";
+const EVENT_PAGE_URL = "https://www.toyorobot.com/News/Event";
 
 const EventNews = () => {
   return (
@@ -56,16 +56,16 @@ const EventNews = () => {
             Exhibition updated news：{EXHIBITION_UPDATED}
           </p>
 
-          {/* 2025 TOYO Global Exhibition */}
+          {/* 2025 HSF Global Exhibition */}
           <article className="border border-gray-200 rounded-lg overflow-hidden mb-10">
             <div className="p-6 sm:p-8 border-b border-gray-200">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs text-gray-400 font-mono">Exhibition updated news：{EXHIBITION_UPDATED}</span>
                 <span className="border border-toyo-red text-toyo-red text-[10px] px-1.5 py-0.5 font-bold uppercase">Exhibition</span>
               </div>
-              <h2 className="text-2xl font-black text-gray-900 mb-3">【TOYO EVENTS】 2025 TOYO Global Exhibition</h2>
+              <h2 className="text-2xl font-black text-gray-900 mb-3">【HSF EVENTS】 2025 HSF Global Exhibition</h2>
               <p className="text-gray-600 leading-relaxed max-w-3xl">
-                The <strong>TOYO Global Exhibition 2025</strong> is coming soon! Join industry leaders from around the world to showcase innovations and explore business opportunities. Stay tuned for more exciting details!
+                The <strong>HSF Global Exhibition 2025</strong> is coming soon! Join industry leaders from around the world to showcase innovations and explore business opportunities. Stay tuned for more exciting details!
               </p>
             </div>
             <div className="overflow-x-auto">
@@ -94,7 +94,7 @@ const EventNews = () => {
           <div className="flex items-center justify-between gap-4 mb-6">
             <h2 className="text-xl font-black text-gray-900">Past Events</h2>
             <a
-              href={TOYO_EVENT_PAGE_URL}
+              href={EVENT_PAGE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-toyo-red hover:underline"
@@ -106,7 +106,7 @@ const EventNews = () => {
             {PAST_EVENTS.map((event, i) => (
               <li key={i}>
                 <a
-                  href={TOYO_EVENT_PAGE_URL}
+                  href={EVENT_PAGE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-wrap items-baseline gap-2 py-2 border-b border-gray-100 hover:border-toyo-red/30 hover:bg-gray-50/50 px-2 -mx-2 rounded transition-colors group"

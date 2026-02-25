@@ -5,12 +5,13 @@ const regions = [
   {
     name: "Asia Pacific",
     count: "25+",
-    countries: ["Japan", "South Korea", "India", "Thailand", "Vietnam", "Singapore", "Malaysia"],
+    countries: ["Japan", "South Korea", "India", "Thailand", "Vietnam", "Singapore", "Malaysia", "Cambodia"],
     color: "bg-toyo-red",
     offices: [
-      { name: "TOYO ROBOTICS Japan", city: "Tokyo, Japan", phone: "+81-3-XXXX-XXXX", email: "japan@toyo.com.tw" },
-      { name: "TOYOROBOTICS KOREA", city: "Seoul, South Korea", phone: "+82-2-XXXX-XXXX", email: "korea@toyo.com.tw" },
-      { name: "TOYO ROBOTICS PRIVATE LIMITED INDIA", city: "Mumbai, India", phone: "+91-22-XXXX-XXXX", email: "india@toyo.com.tw" },
+      { name: "HSF Phnom Penh Office", city: "Phnom Penh, Cambodia", phone: "+855-12 555 947", email: "nakvsk@gmail.com" },
+      { name: "HSF ROBOTICS Japan", city: "Tokyo, Japan", phone: "+81-3-XXXX-XXXX", email: "japan@hsf.com" },
+      { name: "HSF ROBOTICS KOREA", city: "Seoul, South Korea", phone: "+82-2-XXXX-XXXX", email: "korea@hsf.com" },
+      { name: "HSF ROBOTICS PRIVATE LIMITED INDIA", city: "Mumbai, India", phone: "+91-22-XXXX-XXXX", email: "india@hsf.com" },
     ],
   },
   {
@@ -19,7 +20,7 @@ const regions = [
     countries: ["USA", "Canada", "Mexico"],
     color: "bg-blue-600",
     offices: [
-      { name: "TOYO USA", city: "Los Angeles, CA", phone: "+1-XXX-XXX-XXXX", email: "usa@toyo.com.tw" },
+      { name: "HSF USA", city: "Los Angeles, CA", phone: "+1-XXX-XXX-XXXX", email: "usa@hsf.com" },
     ],
   },
   {
@@ -28,7 +29,7 @@ const regions = [
     countries: ["Germany", "UK", "France", "Italy", "Netherlands", "Spain"],
     color: "bg-emerald-600",
     offices: [
-      { name: "TOYO Europe GmbH", city: "Frankfurt, Germany", phone: "+49-XX-XXXX-XXXX", email: "europe@toyo.com.tw" },
+      { name: "HSF Europe GmbH", city: "Frankfurt, Germany", phone: "+49-XX-XXXX-XXXX", email: "europe@hsf.com" },
     ],
   },
   {
@@ -37,18 +38,18 @@ const regions = [
     countries: ["Brazil", "Turkey", "Australia", "South Africa"],
     color: "bg-amber-600",
     offices: [
-      { name: "TOYO Australia", city: "Sydney, Australia", phone: "+61-X-XXXX-XXXX", email: "australia@toyo.com.tw" },
+      { name: "HSF Australia", city: "Sydney, Australia", phone: "+61-X-XXXX-XXXX", email: "australia@hsf.com" },
     ],
   },
 ];
 
 const partners = [
-  { name: "TOYO ROBOTICS . Japan", country: "Japan", flag: "🇯🇵" },
-  { name: "Toyo Nano System Co., Ltd.", country: "Taiwan", flag: "🇹🇼" },
+  { name: "HSF ROBOTICS . Japan", country: "Japan", flag: "🇯🇵" },
+  { name: "HSF Nano System Co., Ltd.", country: "Taiwan", flag: "🇹🇼" },
   { name: "ECON ROBOT INC.", country: "Taiwan", flag: "🇹🇼" },
   { name: "MSI Co., Ltd.", country: "Taiwan", flag: "🇹🇼" },
-  { name: "TOYOROBOTICS KOREA", country: "South Korea", flag: "🇰🇷" },
-  { name: "TOYO ROBOTICS PRIVATE LIMITED INDIA", country: "India", flag: "🇮🇳" },
+  { name: "HSF ROBOTICS KOREA", country: "South Korea", flag: "🇰🇷" },
+  { name: "HSF ROBOTICS PRIVATE LIMITED INDIA", country: "India", flag: "🇮🇳" },
 ];
 
 const GlobalLocations = () => (
@@ -56,7 +57,7 @@ const GlobalLocations = () => (
     {/* Hero */}
     <div className="bg-toyo-dark py-16 px-6">
       <div className="max-w-7xl mx-auto">
-        <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About TOYO</p>
+        <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About HSF</p>
         <h1 className="text-4xl font-black text-white">Global Locations</h1>
         <p className="text-gray-400 mt-3 max-w-xl">
           Serving customers across 50+ countries with a network of trusted partners and regional offices worldwide.
@@ -184,23 +185,26 @@ const GlobalLocations = () => (
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
           <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">Headquarters</p>
-          <h2 className="text-3xl font-black text-toyo-dark mb-4">TOYO Electric Corporation</h2>
+          <h2 className="text-3xl font-black text-toyo-dark mb-4">HSF Electric Corporation</h2>
           <div className="space-y-3 text-toyo-gray">
             <div className="flex items-start gap-3">
               <MapPin className="w-4 h-4 text-toyo-red mt-1 flex-shrink-0" />
-              <span>No. 26, Xinhu Rd., Luzhu Dist., Taoyuan City 338, Taiwan (R.O.C.)</span>
+              <span>Phnom Penh, Cambodia</span>
             </div>
             <div className="flex items-center gap-3">
               <Phone className="w-4 h-4 text-toyo-red flex-shrink-0" />
-              <span>+886-3-XXXX-XXXX</span>
+              <a href="tel:+855-12555947" className="hover:text-toyo-red transition-colors">+855-12 555 947</a>
             </div>
             <div className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-toyo-red flex-shrink-0" />
-              <span>info@toyo.com.tw</span>
+              <a href="mailto:nakvsk@gmail.com" className="hover:text-toyo-red transition-colors">
+                nakvsk@gmail.com
+              </a>
             </div>
-            <div className="flex items-center gap-3">
-              <Globe className="w-4 h-4 text-toyo-red flex-shrink-0" />
-              <span>www.toyo.com.tw</span>
+            <div className="border-l-4 border-toyo-red pl-4 bg-toyo-light-gray p-4 mt-4 rounded-r">
+              <p className="text-sm font-semibold text-toyo-dark mb-1">Business Hours</p>
+              <p className="text-toyo-gray text-xs">Monday – Friday: 08:30 – 17:30 (GMT+8)</p>
+              <p className="text-toyo-gray text-xs">Saturday – Sunday: Closed</p>
             </div>
           </div>
         </div>

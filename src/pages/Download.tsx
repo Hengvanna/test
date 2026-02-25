@@ -133,7 +133,7 @@ const DownloadPage = () => {
             </select>
           </div>
 
-          {/* File grid — TOYO catalog card style */}
+          {/* File grid — HSF catalog card style */}
           <div className="flex-1">
             {/* Section heading */}
             <div className="flex items-center gap-3 mb-6">
