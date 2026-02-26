@@ -3,9 +3,9 @@ import * as pdfjsLib from "pdfjs-dist";
 import { FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-// Vite: ?url resolves worker from node_modules (path includes base in production).
-import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+// Always use CDN for the worker so Hostinger (and other hosts) never serve .mjs as text/plain and break PDF.js.
+const PDFJS_WORKER_VERSION = "5.4.624";
+pdfjsLib.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${PDFJS_WORKER_VERSION}/build/pdf.worker.mjs`;
 
 interface PdfFirstPageThumbProps {
   /** Public URL of the PDF (use when storagePath is not set; requires CORS on storage) */
@@ -52,22 +52,23 @@ export function PdfFirstPageThumb({
 
     const load = async () => {
       try {
-        let arrayBuffer: ArrayBuffer;
-        if (storagePath) {
-          // Load via Supabase client — works on localhost and server without extra CORS config
+        let arrayBuffer: ArrayBuffer | null = null;
+        // 1) Prefer Supabase client (no CORS). If env missing on server, this fails.
+        if (storagePath && supabase) {
           const { data, error: downloadError } = await supabase.storage
             .from(storageBucket)
             .download(storagePath);
-          if (downloadError || !data) throw new Error(downloadError?.message ?? "Download failed");
-          arrayBuffer = await data.arrayBuffer();
-        } else if (src) {
+          if (!downloadError && data) arrayBuffer = await data.arrayBuffer();
+        }
+        // 2) Fallback: load via public URL (works when Supabase env missing on Hostinger; needs CORS on bucket).
+        if (!arrayBuffer && src) {
           const res = await fetch(src, { mode: "cors" });
-          if (!res.ok) throw new Error(`PDF fetch ${res.status}`);
-          arrayBuffer = await res.arrayBuffer();
-        } else {
+          if (res.ok) arrayBuffer = await res.arrayBuffer();
+        }
+        if (!arrayBuffer || cancelledRef.current) {
+          if (!arrayBuffer) setError(true);
           return;
         }
-        if (cancelledRef.current) return;
 
         const loadingTask = pdfjsLib.getDocument({
           data: arrayBuffer,
