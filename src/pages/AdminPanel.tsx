@@ -114,7 +114,9 @@ function ProductFormModal({
   const [form, setForm] = useState(initialForm);
   const [saving, setSaving] = useState(false);
   const [imgUploading, setImgUploading] = useState(false);
+  const [catalogUploading, setCatalogUploading] = useState(false);
   const imgInputRef = useRef<HTMLInputElement>(null);
+  const catalogInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!initial;
 
   const set = (key: keyof typeof form, val: unknown) =>
@@ -130,6 +132,21 @@ function ProductFormModal({
     set("image_url", data.publicUrl);
     set("image_path", path);
     setImgUploading(false);
+  };
+
+  const uploadCatalog = async (file: File) => {
+    setCatalogUploading(true);
+    const ext = file.name.split(".").pop();
+    const path = `catalogs/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const { error } = await supabase.storage.from("media").upload(path, file);
+    if (error) {
+      showToast("PDF upload failed", false);
+      setCatalogUploading(false);
+      return;
+    }
+    const { data } = supabase.storage.from("media").getPublicUrl(path);
+    set("catalog_url", data.publicUrl);
+    setCatalogUploading(false);
   };
 
   const save = async () => {
@@ -316,13 +333,47 @@ function ProductFormModal({
             <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">Download Links</label>
             <div className="space-y-2">
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">PDF Catalog URL</label>
+                <label className="text-xs text-gray-500 mb-1 block">PDF Catalog</label>
+                <input
+                  ref={catalogInputRef}
+                  type="file"
+                  accept="application/pdf"
+                  className="hidden"
+                  onChange={e => {
+                    const file = e.target.files?.[0];
+                    if (file) uploadCatalog(file);
+                  }}
+                />
+                <div className="flex items-center gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => catalogInputRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-700 hover:border-toyo-red hover:text-toyo-red transition-colors"
+                  >
+                    <CloudUpload className="w-3.5 h-3.5" />
+                    {catalogUploading ? "Uploading..." : form.catalog_url ? "Replace PDF" : "Upload PDF"}
+                  </button>
+                  {form.catalog_url && !catalogUploading && (
+                    <a
+                      href={form.catalog_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs text-toyo-red hover:underline truncate max-w-[200px]"
+                    >
+                      View current PDF
+                    </a>
+                  )}
+                </div>
+                <label className="text-xs text-gray-500 mb-1 block">PDF Catalog URL (optional)</label>
                 <input
                   value={form.catalog_url || ""}
                   onChange={e => set("catalog_url", e.target.value)}
                   placeholder="https://... (PDF catalog link)"
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-toyo-red"
                 />
+                <p className="text-[10px] text-gray-400 mt-1">
+                  Upload a PDF file or paste a direct URL. Uploading will automatically fill this field.
+                </p>
               </div>
             </div>
           </div>
