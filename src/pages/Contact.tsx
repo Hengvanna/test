@@ -22,7 +22,7 @@ const Contact = () => {
               {[
                 { icon: MapPin, label: "Headquarters", value: "Phnom Penh, Cambodia" },
                 { icon: Phone, label: "Phone", value: "+855-12 555 947" },
-                { icon: Mail, label: "Email", value: "nakvsk@gmail.com" },
+                { icon: Mail, label: "Email", value: "alvin@hsf-robot.com" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex gap-4 items-start">
                   <div className="w-10 h-10 bg-toyo-red/10 flex items-center justify-center flex-shrink-0">

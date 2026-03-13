@@ -8,7 +8,7 @@ const regions = [
     countries: ["Japan", "South Korea", "India", "Thailand", "Vietnam", "Singapore", "Malaysia", "Cambodia"],
     color: "bg-toyo-red",
     offices: [
-      { name: "HSF Phnom Penh Office", city: "Phnom Penh, Cambodia", phone: "+855-12 555 947", email: "nakvsk@gmail.com" },
+      { name: "HSF Phnom Penh Office", city: "Phnom Penh, Cambodia", phone: "+855-12 555 947", email: "alvin@hsf-robot.com" },
       { name: "HSF ROBOTICS Japan", city: "Tokyo, Japan", phone: "+81-3-XXXX-XXXX", email: "japan@hsf.com" },
       { name: "HSF ROBOTICS KOREA", city: "Seoul, South Korea", phone: "+82-2-XXXX-XXXX", email: "korea@hsf.com" },
       { name: "HSF ROBOTICS PRIVATE LIMITED INDIA", city: "Mumbai, India", phone: "+91-22-XXXX-XXXX", email: "india@hsf.com" },
@@ -197,8 +197,8 @@ const GlobalLocations = () => (
             </div>
             <div className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-toyo-red flex-shrink-0" />
-              <a href="mailto:nakvsk@gmail.com" className="hover:text-toyo-red transition-colors">
-                nakvsk@gmail.com
+              <a href="mailto:alvin@hsf-robot.com" className="hover:text-toyo-red transition-colors">
+                alvin@hsf-robot.com
               </a>
             </div>
             <div className="border-l-4 border-toyo-red pl-4 bg-toyo-light-gray p-4 mt-4 rounded-r">

@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { ArrowRight, FileDown, Download, Search, Mail, ChevronLeft, ChevronRight, Zap, Gauge, Leaf, Shield, Plug, Globe } from "lucide-react";
 import heroSlide1 from "@/assets/hero-slide-1.jpg";
 import heroBanner from "@/assets/hero-banner.jpg";
+import carAssemblyLine from "@/assets/car-assembly-line.png";
+import carFactoryProduction from "@/assets/car-factory-production.png";
+import robotLine from "@/assets/robot-line.png";
+import hsfProductsSmt from "@/assets/hsf-products-smt.png";
+import hsfWarehouse from "@/assets/hsf-warehouse.png";
 import heroLgwSeries from "@/assets/hero-lgw-series.png";
 import heroNanoSystem from "@/assets/hero-nano-system.png";
 import heroElectricGripper from "@/assets/hero-electric-gripper.png";
@@ -37,6 +42,46 @@ const heroSlides = [
     subtitle: "Compact Electric Cylinder",
     desc: "Space-saving design with powerful performance for compact automation needs",
     specs: ["Ultra-compact body", "Max speed 800mm/s", "Clean room compatible"],
+  },
+  {
+    img: carAssemblyLine,
+    badge: "Manufacturing",
+    title: "SMT Production",
+    subtitle: "Advanced Surface Mount Technology",
+    desc: "High-precision cleanroom assembly for electronics and industrial components",
+    specs: ["Automated assembly", "Clean room Class 1", "Precision placement"],
+  },
+  {
+    img: carFactoryProduction,
+    badge: "Smart Factory",
+    title: "Systems Integrated",
+    subtitle: "Automated Car Production",
+    desc: "Isometric smart factory with data-optimized production and robotic assembly",
+    specs: ["Data optimized", "Systems integrated", "Full automation"],
+  },
+  {
+    img: robotLine,
+    badge: "Automation",
+    title: "Robotic Production",
+    subtitle: "Precision Manufacturing Line",
+    desc: "Advanced automated production with robotic arms and quality control stations",
+    specs: ["Multi-axis robotics", "Final QC stations", "Vacuum technology"],
+  },
+  {
+    img: hsfProductsSmt,
+    badge: "HSF Products",
+    title: "Linear Actuators & SMT",
+    subtitle: "Precision Components & Manufacturing",
+    desc: "HSF linear actuators and SMT machinery for precision industrial applications",
+    specs: ["Linear actuators", "Pick-and-place", "Built-in control"],
+  },
+  {
+    img: hsfWarehouse,
+    badge: "HSF",
+    title: "Global Inventory",
+    subtitle: "Organized Production & Storage",
+    desc: "Well-stocked warehouse with linear actuators and industrial components ready for delivery",
+    specs: ["Large inventory", "Organized storage", "Quick delivery"],
   },
   // {
   //   img: heroLgwSeries,

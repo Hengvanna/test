@@ -70,11 +70,11 @@ const Footer = () => {
               </li>
               <li>
                 <a
-                  href="mailto:nakvsk@gmail.com"
+                  href="mailto:alvin@hsf-robot.com"
                   style={{ color: "hsl(var(--toyo-gray))" }}
                   className="text-sm hover:text-white transition-colors"
                 >
-                  nakvsk@gmail.com
+                  alvin@hsf-robot.com
                 </a>
               </li>
             </ul>
