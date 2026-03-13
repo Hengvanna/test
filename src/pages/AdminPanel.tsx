@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { uploadToSupabase, shouldUseResumableUpload } from "@/lib/resumableUpload";
 import {
   Upload, Trash2, Download, LogOut, FileText,
   Search, Check, AlertCircle, CloudUpload, Images,
@@ -115,6 +116,7 @@ function ProductFormModal({
   const [saving, setSaving] = useState(false);
   const [imgUploading, setImgUploading] = useState(false);
   const [catalogUploading, setCatalogUploading] = useState(false);
+  const [catalogProgress, setCatalogProgress] = useState<number | null>(null);
   const imgInputRef = useRef<HTMLInputElement>(null);
   const catalogInputRef = useRef<HTMLInputElement>(null);
   const isEdit = !!initial;
@@ -136,17 +138,31 @@ function ProductFormModal({
 
   const uploadCatalog = async (file: File) => {
     setCatalogUploading(true);
+    setCatalogProgress(0);
     const ext = file.name.split(".").pop();
     const path = `catalogs/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error } = await supabase.storage.from("media").upload(path, file);
-    if (error) {
-      showToast("PDF upload failed", false);
+    try {
+      if (shouldUseResumableUpload(file.size)) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) { showToast("Please sign in to upload", false); return; }
+        await uploadToSupabase("media", path, file, {
+          accessToken: session.access_token,
+          onProgress: (uploaded, total) => setCatalogProgress(total ? Math.round((uploaded / total) * 100) : 0),
+        });
+      } else {
+        const { error } = await supabase.storage.from("media").upload(path, file);
+        if (error) throw error;
+      }
+      const { data } = supabase.storage.from("media").getPublicUrl(path);
+      set("catalog_url", data.publicUrl);
+      showToast("PDF uploaded!");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "PDF upload failed";
+      showToast(msg, false);
+    } finally {
       setCatalogUploading(false);
-      return;
+      setCatalogProgress(null);
     }
-    const { data } = supabase.storage.from("media").getPublicUrl(path);
-    set("catalog_url", data.publicUrl);
-    setCatalogUploading(false);
   };
 
   const save = async () => {
@@ -348,10 +364,15 @@ function ProductFormModal({
                   <button
                     type="button"
                     onClick={() => catalogInputRef.current?.click()}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-700 hover:border-toyo-red hover:text-toyo-red transition-colors"
+                    disabled={catalogUploading}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-gray-200 text-gray-700 hover:border-toyo-red hover:text-toyo-red transition-colors disabled:opacity-60"
                   >
                     <CloudUpload className="w-3.5 h-3.5" />
-                    {catalogUploading ? "Uploading..." : form.catalog_url ? "Replace PDF" : "Upload PDF"}
+                    {catalogUploading
+                      ? (catalogProgress != null ? `Uploading ${catalogProgress}%` : "Uploading...")
+                      : form.catalog_url
+                        ? "Replace PDF"
+                        : "Upload PDF"}
                   </button>
                   {form.catalog_url && !catalogUploading && (
                     <a
@@ -372,7 +393,7 @@ function ProductFormModal({
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-toyo-red"
                 />
                 <p className="text-[10px] text-gray-400 mt-1">
-                  Upload a PDF file or paste a direct URL. Uploading will automatically fill this field.
+                  Upload a PDF file (large files supported) or paste a direct URL. Increase limit in Supabase Dashboard → Storage → Settings if needed.
                 </p>
               </div>
             </div>

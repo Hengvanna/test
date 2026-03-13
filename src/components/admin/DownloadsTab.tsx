@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Upload, Trash2, Plus, X, FileText, Search, CloudUpload, Eye, EyeOff,
 } from "lucide-react";
+import { uploadToSupabase, shouldUseResumableUpload } from "@/lib/resumableUpload";
 
 const DOWNLOAD_CATEGORIES = [
   { id: "catalogs", label: "Product Catalogs" },
@@ -50,6 +51,7 @@ function AddFileModal({
   const [revision, setRevision] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleSave = async () => {
@@ -58,12 +60,26 @@ function AddFileModal({
       return;
     }
     setUploading(true);
+    setUploadProgress(0);
     const ext = file.name.split(".").pop();
     const filePath = `downloads/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error: storageErr } = await supabase.storage.from("media").upload(filePath, file);
-    if (storageErr) {
-      showToast("Upload failed: " + storageErr.message, false);
+    try {
+      if (shouldUseResumableUpload(file.size)) {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) { showToast("Please sign in to upload", false); return; }
+        await uploadToSupabase("media", filePath, file, {
+          accessToken: session.access_token,
+          onProgress: (uploaded, total) => setUploadProgress(total ? Math.round((uploaded / total) * 100) : 0),
+        });
+      } else {
+        const { error: storageErr } = await supabase.storage.from("media").upload(filePath, file);
+        if (storageErr) throw storageErr;
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Upload failed";
+      showToast(msg, false);
       setUploading(false);
+      setUploadProgress(null);
       return;
     }
     const { data: urlData } = supabase.storage.from("media").getPublicUrl(filePath);
@@ -81,6 +97,7 @@ function AddFileModal({
       uploaded_by: session?.user?.id ?? null,
     });
     setUploading(false);
+    setUploadProgress(null);
     if (dbErr) {
       showToast("Save failed: " + dbErr.message, false);
       return;
@@ -172,7 +189,7 @@ function AddFileModal({
             className="px-5 py-2 text-sm font-semibold text-white rounded-lg transition-colors disabled:opacity-50"
             style={{ backgroundColor: "hsl(var(--toyo-red))" }}
           >
-            {uploading ? "Uploading..." : "Upload File"}
+            {uploading ? (uploadProgress != null ? `Uploading ${uploadProgress}%` : "Uploading...") : "Upload File"}
           </button>
         </div>
       </div>
