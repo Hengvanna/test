@@ -27,22 +27,7 @@ interface NewsItem {
 }
 
 const heroSlides = [
-  {
-    img: heroSlide1,
-    badge: "New Series",
-    title: "GTH Series",
-    subtitle: "High Rigidity Linear Actuator",
-    desc: "Ideal for heavy-duty applications requiring maximum precision and load capacity",
-    specs: ["Load capacity up to 200kg", "Stroke up to 1500mm", "Repeatability ±0.01mm"],
-  },
-  {
-    img: heroBanner,
-    badge: "New Series",
-    title: "EHC Series",
-    subtitle: "Compact Electric Cylinder",
-    desc: "Space-saving design with powerful performance for compact automation needs",
-    specs: ["Ultra-compact body", "Max speed 800mm/s", "Clean room compatible"],
-  },
+ 
   {
     img: carAssemblyLine,
     badge: "Manufacturing",
@@ -203,7 +188,6 @@ const Index = () => {
             className={`absolute inset-0 transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
           >
             <img src={s.img} alt={s.title} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/40" />
             <div className="absolute bottom-12 left-12 max-w-lg text-white">
               <span className="text-xs font-semibold bg-white/20 backdrop-blur-sm border border-white/30 px-3 py-1 rounded-full uppercase tracking-widest">
                 {s.badge}
