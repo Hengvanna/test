@@ -28,7 +28,20 @@ interface NewsItem {
 
 const heroSlides = [
  
-  {
+  
+    
+    {
+      img: hsfWarehouse,
+      badge: "HSF",
+      title: "Global Inventory",
+      subtitle: "Organized Production & Storage",
+      desc: "Well-stocked warehouse with linear actuators and industrial components ready for delivery",
+      specs: ["Large inventory", "Organized storage", "Quick delivery"],
+    },
+
+
+
+{
     img: carAssemblyLine,
     badge: "Manufacturing",
     title: "SMT Production",
@@ -60,14 +73,7 @@ const heroSlides = [
     desc: "HSF linear actuators and SMT machinery for precision industrial applications",
     specs: ["Linear actuators", "Pick-and-place", "Built-in control"],
   },
-  {
-    img: hsfWarehouse,
-    badge: "HSF",
-    title: "Global Inventory",
-    subtitle: "Organized Production & Storage",
-    desc: "Well-stocked warehouse with linear actuators and industrial components ready for delivery",
-    specs: ["Large inventory", "Organized storage", "Quick delivery"],
-  },
+  
   // {
   //   img: heroLgwSeries,
   //   badge: "TAIWAN EXCELLENCE 2022",
