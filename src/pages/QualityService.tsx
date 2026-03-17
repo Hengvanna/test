@@ -48,8 +48,7 @@ const QualityService = () => (
         <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About HSF</p>
         <h1 className="text-4xl font-black text-white">Quality & Service</h1>
         <p className="text-gray-400 mt-3 max-w-xl">
-          30+ years of precision manufacturing, backed by international certifications and a global service network.
-        </p>
+        With over 6 years of precision manufacturing experience, we specialize in supplying OEM accessories, components, and production parts for our clients, supporting their international trade activities while exporting our core products to global markets.        </p>
       </div>
     </div>
 
@@ -58,28 +57,12 @@ const QualityService = () => (
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
           <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">Our Commitment</p>
-          <h2 className="text-3xl font-black text-toyo-dark mb-4">Quality is Not Optional</h2>
+          <h2 className="text-3xl font-black text-toyo-dark mb-4">Quality is always International Standard</h2>
           <p className="text-toyo-gray leading-relaxed mb-4">
-            At HSF, quality is embedded into every step of our process — from concept design to the moment a product reaches your factory floor. We hold ourselves to the highest international standards because our customers' operations depend on it.
-          </p>
-          <p className="text-toyo-gray leading-relaxed">
-            Our quality management system is built around continuous improvement, real-time process monitoring, and a company-wide culture that treats defects as unacceptable — not just in finished products, but in every aspect of how we work.
+          At HSF, quality is strictly controlled before shipment. The continuous repeat orders from our major clients reflect the trust they place in us and demonstrate our commitment to maintaining the highest manufacturing standards in the region. Our production and quality management operating 24/7, with real-time process monitoring, unique design capabilities, and strict compliance with quality standards
           </p>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          {[
-            { icon: Shield, label: "Zero Defect Goal", sub: "Continuous improvement culture" },
-            { icon: Award, label: "ISO Certified", sub: "9001 & 14001" },
-            { icon: CheckCircle, label: "100% Tested", sub: "Every unit before shipment" },
-            { icon: Clock, label: "30+ Years", sub: "Manufacturing expertise" },
-          ].map(({ icon: Icon, label, sub }) => (
-            <div key={label} className="bg-toyo-light-gray p-6 text-center rounded-xl">
-              <Icon className="w-8 h-8 text-toyo-red mx-auto mb-2" />
-              <div className="font-black text-toyo-dark text-base">{label}</div>
-              <div className="text-toyo-gray text-sm">{sub}</div>
-            </div>
-          ))}
-        </div>
+      
       </div>
     </section>
 

@@ -15,14 +15,6 @@ const megaMenuData = [
           { label: "Global Locations", href: "/about/global" },
         ],
       },
-      {
-        title: "News",
-        links: [
-          { label: "News", href: "/news" },
-          { label: "Event News", href: "/news/event" },
-          { label: "Company Announcements", href: "/news/announcements" },
-        ],
-      },
     ],
   },
   {
@@ -87,9 +79,6 @@ const megaMenuData = [
       {
         title: "Business partner",
         links: [
-          { label: "HSF ROBOTICS . Japan", href: "/business-partner" },
-          { label: "HSF Nano System Co., Ltd.", href: "/business-partner" },
-          { label: "ECON ROBOT INC.", href: "/business-partner" },
           { label: "MSI Co., Ltd.", href: "/business-partner" },
           { label: "HSF ROBOTICS KOREA", href: "/business-partner" },
           { label: "HSF ROBOTICS PRIVATE LIMITED INDIA", href: "/business-partner" },

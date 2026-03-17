@@ -1,8 +1,51 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+
+const CONTACT_EMAIL = "alvin@hsf-robot.com";
+const FORMSUBMIT_URL = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 
 const Contact = () => {
   const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      toast({ title: "Please fill in required fields", variant: "destructive" });
+      return;
+    }
+
+    setSending(true);
+    try {
+      const res = await fetch(FORMSUBMIT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          message: form.message,
+          _replyto: form.email,
+          _subject: `Contact from ${form.name}${form.company ? ` (${form.company})` : ""}`,
+        }),
+      });
+
+      if (res.ok) {
+        setForm({ name: "", email: "", company: "", message: "" });
+        toast({ title: "Message sent!", description: "We'll get back to you soon." });
+      } else {
+        const data = await res.json().catch(() => ({}));
+        const errMsg = data?.message ?? "Failed to send. Please try again.";
+        toast({ title: "Send failed", description: errMsg, variant: "destructive" });
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Please check your connection and try again.";
+      toast({ title: "Send failed", description: msg, variant: "destructive" });
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,7 +94,7 @@ const Contact = () => {
           {/* Form */}
           <div>
             <h2 className="text-2xl font-black text-toyo-dark mb-6">Send Us a Message</h2>
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
               {[
                 { name: "name", label: "Full Name", type: "text", placeholder: "John Smith" },
                 { name: "email", label: "Email Address", type: "email", placeholder: "john@company.com" },
@@ -80,7 +123,8 @@ const Contact = () => {
               </div>
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-toyo-red text-white py-3 font-bold hover:bg-toyo-red-dark transition-colors"
+                disabled={sending}
+                className="w-full flex items-center justify-center gap-2 bg-toyo-red text-white py-3 font-bold hover:bg-toyo-red-dark transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <Send className="w-4 h-4" />
                 Send Message

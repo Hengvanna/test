@@ -38,7 +38,7 @@ const AppLayout = () => {
         <Route path="/about/global" element={<GlobalLocations />} />
         <Route path="/about/service" element={<QualityService />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/news" element={<News />} />
+        {/* <Route path="/news" element={<News />} /> */}
         <Route path="/news/event" element={<EventNews />} />
         <Route path="/news/announcements" element={<Announcements />} />
         <Route path="/download" element={<DownloadPage />} />

@@ -54,33 +54,7 @@ const partners = [
 
 const GlobalLocations = () => (
   <div className="min-h-screen bg-background">
-    {/* Hero */}
-    <div className="bg-toyo-dark py-16 px-6">
-      <div className="max-w-7xl mx-auto">
-        <p className="text-toyo-red font-semibold uppercase tracking-widest text-sm mb-2">About HSF</p>
-        <h1 className="text-4xl font-black text-white">Global Locations</h1>
-        <p className="text-gray-400 mt-3 max-w-xl">
-          Serving customers across 50+ countries with a network of trusted partners and regional offices worldwide.
-        </p>
-      </div>
-    </div>
-
-    {/* Stats bar */}
-    <div className="bg-toyo-red py-8 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
-        {[
-          { label: "Countries Served", value: "50+" },
-          { label: "Global Partners", value: "63+" },
-          { label: "Years of Global Presence", value: "30+" },
-          { label: "Regional Offices", value: "8" },
-        ].map((stat) => (
-          <div key={stat.label}>
-            <div className="text-3xl font-black">{stat.value}</div>
-            <div className="text-white/80 text-sm mt-1">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-    </div>
+   
 
     {/* World Map Placeholder + regions */}
     <section className="py-16 px-6">

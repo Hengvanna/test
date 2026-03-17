@@ -1,15 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Award, Shield, Clock, Users } from "lucide-react";
 
-const timeline = [
-  { year: "1991", event: "HSF Electric Corporation founded in Tainan, Taiwan." },
-  { year: "1998", event: "Launched first electric actuator product line for industrial automation." },
-  { year: "2003", event: "Expanded operations with new manufacturing facility." },
-  { year: "2008", event: "Entered European and Southeast Asian markets." },
-  { year: "2013", event: "Achieved ISO 9001 & ISO 14001 certifications." },
-  { year: "2018", event: "Released next-generation SCARA and Cartesian robot series." },
-  { year: "2024", event: "Serving 10,000+ clients across 50+ countries worldwide." },
-];
 
 const certs = [
   { name: "ISO 9001", desc: "Quality Management System" },
@@ -32,21 +23,21 @@ const About = () => (
         <div>
           <h2 className="text-2xl font-black text-toyo-dark mb-4">Who We Are</h2>
           <p className="text-toyo-gray leading-relaxed mb-4">
-            HSF Electric Corporation is a leading manufacturer of electric actuators, robotic systems, and industrial automation solutions. Founded in 1991 in Tainan, Taiwan, we have grown from a regional manufacturer to a global automation partner trusted by thousands of companies worldwide.
+          HSF Electric Corporation is a leading manufacturer of electric actuators, robotic systems, and industrial automation solutions. Founded in 2020 in <strong>Foshan</strong>, <strong>China</strong>, we have grown from a regional manufacturer, with nearly <strong>85% of our products supplied to OEM partners under their own brands</strong>.
           </p>
           <p className="text-toyo-gray leading-relaxed mb-4">
-            Our product portfolio spans electric actuators, motorized slides, linear motors, SCARA robots, Cartesian robots, controllers, and accessories — all designed with precision engineering and built to perform in the most demanding industrial environments.
+          We have established a mission to become a <strong>global automation partner</strong> and are expanding our business with the objective of setting up <strong>supply chain hubs in the ASEAN region</strong>, where your company could become part of our <strong>wholesale or distributor network</strong> for your respective or regional markets.
           </p>
           <p className="text-toyo-gray leading-relaxed">
-            We champion electric automation over conventional pneumatic systems, delivering superior energy efficiency, repeatability, and cleanliness that modern manufacturing demands.
+          Our product portfolio includes <strong>electric actuators, motorized slides, linear motors, SCARA robots, Cartesian robots, controllers, and accessories</strong> — all designed with precision engineering and built to deliver <strong>high performance in demanding industrial environments</strong>.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           {[
-            { icon: Clock, label: "30+ Years", sub: "Industry Experience" },
-            { icon: Users, label: "10K+", sub: "Global Clients" },
-            { icon: Award, label: "50+", sub: "Countries Served" },
-            { icon: Shield, label: "ISO Certified", sub: "Quality Assured" },
+            { icon: Clock, label: "6+ Years", sub: "Industry Experience" },
+            { icon: Users, label: "85% OEM ", sub: "China Clients" },
+            { icon: Award, label: "Ready for ", sub: "ASEAN + Europe Partnership" },
+            { icon: Shield, label: "Certified by ", sub: "Districutors" },
           ].map(({ icon: Icon, label, sub }) => (
             <div key={label} className="bg-toyo-light-gray p-6 text-center">
               <Icon className="w-8 h-8 text-toyo-red mx-auto mb-2" />
@@ -77,28 +68,7 @@ const About = () => (
       </div>
     </section>
 
-    {/* Timeline */}
-    <section className="py-16 px-6 bg-toyo-light-gray">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-2xl font-black text-toyo-dark mb-10 text-center">Our Journey</h2>
-        <div className="relative">
-          <div className="absolute left-16 top-0 bottom-0 w-0.5 bg-toyo-red/30" />
-          <div className="space-y-8">
-            {timeline.map((item) => (
-              <div key={item.year} className="flex gap-6 items-start">
-                <div className="w-16 text-right flex-shrink-0">
-                  <span className="font-black text-toyo-red text-sm">{item.year}</span>
-                </div>
-                <div className="relative">
-                  <div className="absolute -left-[21px] top-1.5 w-3 h-3 rounded-full bg-toyo-red border-2 border-white" />
-                  <p className="text-toyo-gray text-sm leading-relaxed pl-4">{item.event}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+   
 
     {/* Certifications */}
     <section className="py-16 px-6">

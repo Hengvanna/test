@@ -28,9 +28,8 @@ interface NewsItem {
 
 const heroSlides = [
  
-  
-    
-    {
+     
+  {
       img: hsfWarehouse,
       badge: "HSF",
       title: "Global Inventory",
@@ -38,7 +37,6 @@ const heroSlides = [
       desc: "Well-stocked warehouse with linear actuators and industrial components ready for delivery",
       specs: ["Large inventory", "Organized storage", "Quick delivery"],
     },
-
 
 
 {
@@ -65,14 +63,14 @@ const heroSlides = [
     desc: "Advanced automated production with robotic arms and quality control stations",
     specs: ["Multi-axis robotics", "Final QC stations", "Vacuum technology"],
   },
-  {
-    img: hsfProductsSmt,
-    badge: "HSF Products",
-    title: "Linear Actuators & SMT",
-    subtitle: "Precision Components & Manufacturing",
-    desc: "HSF linear actuators and SMT machinery for precision industrial applications",
-    specs: ["Linear actuators", "Pick-and-place", "Built-in control"],
-  },
+  // {
+  //   img: hsfProductsSmt,
+  //   badge: "HSF Products",
+  //   title: "Linear Actuators & SMT",
+  //   subtitle: "Precision Components & Manufacturing",
+  //   desc: "HSF linear actuators and SMT machinery for precision industrial applications",
+  //   specs: ["Linear actuators", "Pick-and-place", "Built-in control"],
+  // },
   
   // {
   //   img: heroLgwSeries,
