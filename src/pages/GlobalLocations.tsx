@@ -46,8 +46,6 @@ const regions = [
 const partners = [
   { name: "HSF ROBOTICS . Japan", country: "Japan", flag: "🇯🇵" },
   { name: "HSF Nano System Co., Ltd.", country: "Taiwan", flag: "🇹🇼" },
-  { name: "ECON ROBOT INC.", country: "Taiwan", flag: "🇹🇼" },
-  { name: "MSI Co., Ltd.", country: "Taiwan", flag: "🇹🇼" },
   { name: "HSF ROBOTICS KOREA", country: "South Korea", flag: "🇰🇷" },
   { name: "HSF ROBOTICS PRIVATE LIMITED INDIA", country: "India", flag: "🇮🇳" },
 ];
